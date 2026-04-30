@@ -1,0 +1,916 @@
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Eden Chen — Portfolio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=Syne:wght@600;700;800&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ── TOKENS ────────────────────────────────────────────────── */
+    :root {
+      --sky0:   #e8f4ff;
+      --sky1:   #cce5ff;
+      --sky2:   #a8d4ff;
+      --sky3:   #7bb8f5;
+
+      --blue-a: #4f9cf9;
+      --blue-b: #3b7de8;
+      --blue-c: #2256c7;
+      --blue-mid: #5baaf9;
+
+      --accent:  #7fd4f9;
+      --glow:    rgba(91,170,249,0.28);
+
+      --white:   #ffffff;
+      --card-bg: rgba(255,255,255,0.72);
+      --card-border: rgba(180,214,255,0.55);
+
+      --text-dark: #1a2d4f;
+      --text-mid:  #3b5a8a;
+      --text-soft: #6b8db8;
+
+      --radius-lg: 22px;
+      --radius-sm: 12px;
+      --shadow-card: 0 6px 32px rgba(79,156,249,0.13), 0 1.5px 6px rgba(79,156,249,0.09);
+      --shadow-hover: 0 14px 48px rgba(79,156,249,0.22), 0 3px 14px rgba(79,156,249,0.14);
+    }
+
+    /* ── RESET ─────────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    /* ── BODY / SKY BACKGROUND ─────────────────────────────────── */
+    body {
+      font-family: 'Nunito', sans-serif;
+      color: var(--text-dark);
+      min-height: 100vh;
+      background:
+        radial-gradient(ellipse 80% 60% at 50% -10%, #b8dcff 0%, transparent 70%),
+        radial-gradient(ellipse 60% 50% at 85% 10%,  #cce9ff 0%, transparent 65%),
+        radial-gradient(ellipse 50% 40% at 15% 20%,  #d9eeff 0%, transparent 60%),
+        linear-gradient(175deg, #ddf0ff 0%, #eef7ff 38%, #f5fbff 65%, #eaf4ff 100%);
+      overflow-x: hidden;
+    }
+
+    /* ── NOISE TEXTURE OVERLAY ─────────────────────────────────── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── NAV ────────────────────────────────────────────────────── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 48px;
+      height: 64px;
+      background: rgba(232,244,255,0.72);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border-bottom: 1px solid rgba(180,214,255,0.45);
+    }
+
+    .nav-logo {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 1.15rem;
+      background: linear-gradient(110deg, var(--blue-c), var(--blue-a), var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      letter-spacing: -0.5px;
+    }
+
+    .nav-links { display: flex; gap: 32px; list-style: none; }
+    .nav-links a {
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--text-mid);
+      text-decoration: none;
+      letter-spacing: 0.02em;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--blue-a); }
+
+    /* ── MAIN WRAPPER ───────────────────────────────────────────── */
+    main {
+      position: relative;
+      z-index: 1;
+      max-width: 1060px;
+      margin: 0 auto;
+      padding: 0 28px 80px;
+    }
+
+    /* ── SECTION SPACING ─────────────────────────────────────────── */
+    section { padding-top: 110px; }
+
+    /* ── HERO ───────────────────────────────────────────────────── */
+    #hero {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+      align-items: center;
+      padding-top: 130px;
+      padding-bottom: 20px;
+    }
+
+    .hero-text { display: flex; flex-direction: column; gap: 20px; }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      background: linear-gradient(100deg, rgba(91,170,249,0.18), rgba(123,184,245,0.12));
+      border: 1px solid rgba(91,170,249,0.35);
+      color: var(--blue-b);
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 6px 14px;
+      border-radius: 999px;
+      width: fit-content;
+      backdrop-filter: blur(6px);
+    }
+    .hero-badge::before {
+      content: '◈';
+      font-size: 0.7rem;
+      color: var(--blue-a);
+    }
+
+    .hero-name {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(2.8rem, 5.5vw, 4.2rem);
+      font-weight: 800;
+      line-height: 1.05;
+      letter-spacing: -1.5px;
+      background: linear-gradient(135deg, var(--blue-c) 0%, var(--blue-a) 55%, var(--accent) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-tagline {
+      font-size: 1.08rem;
+      font-weight: 500;
+      color: var(--text-mid);
+      line-height: 1.65;
+      max-width: 420px;
+    }
+
+    .hero-tagline strong {
+      color: var(--blue-b);
+      font-weight: 700;
+    }
+
+    .hero-cta-row { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 6px; }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 11px 24px;
+      border-radius: 999px;
+      font-family: 'Nunito', sans-serif;
+      font-size: 0.88rem;
+      font-weight: 700;
+      text-decoration: none;
+      cursor: pointer;
+      border: none;
+      transition: transform 0.18s, box-shadow 0.18s;
+    }
+    .btn:hover { transform: translateY(-2px); }
+
+    .btn-primary {
+      background: linear-gradient(110deg, var(--blue-b), var(--blue-a), #6ec6f8);
+      color: #fff;
+      box-shadow: 0 4px 20px rgba(79,156,249,0.38);
+    }
+    .btn-primary:hover { box-shadow: 0 8px 32px rgba(79,156,249,0.52); }
+
+    .btn-outline {
+      background: rgba(255,255,255,0.65);
+      color: var(--blue-b);
+      border: 1.5px solid rgba(91,170,249,0.45);
+      backdrop-filter: blur(8px);
+    }
+    .btn-outline:hover { background: rgba(255,255,255,0.9); }
+
+    /* ── HERO IMAGE ─────────────────────────────────────────────── */
+    .hero-image-wrap {
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .hero-image-wrap::before {
+      content: '';
+      position: absolute;
+      inset: -18px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(91,170,249,0.22) 0%, transparent 70%);
+      animation: pulse-glow 3.5s ease-in-out infinite;
+    }
+
+    @keyframes pulse-glow {
+      0%, 100% { transform: scale(1); opacity: 0.7; }
+      50%       { transform: scale(1.06); opacity: 1; }
+    }
+
+    .hero-img {
+      width: clamp(220px, 34vw, 320px);
+      height: clamp(220px, 34vw, 320px);
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid rgba(255,255,255,0.85);
+      box-shadow: 0 12px 52px rgba(79,156,249,0.22), 0 0 0 8px rgba(168,212,255,0.35);
+      display: block;
+      background: linear-gradient(135deg, var(--sky1), var(--sky2));
+    }
+
+    /* ── FLOATING CHIPS ─────────────────────────────────────────── */
+    .chip-float {
+      position: absolute;
+      background: rgba(255,255,255,0.82);
+      border: 1px solid rgba(168,212,255,0.6);
+      border-radius: 999px;
+      padding: 7px 14px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--blue-b);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 4px 18px rgba(79,156,249,0.14);
+      white-space: nowrap;
+      animation: float-bob 4s ease-in-out infinite;
+    }
+    .chip-1 { top: 14%;  right: -6%; animation-delay: 0s; }
+    .chip-2 { bottom: 18%; left: -8%; animation-delay: 1.4s; }
+    .chip-3 { top: 62%; right: -10%; animation-delay: 2.2s; }
+
+    @keyframes float-bob {
+      0%, 100% { transform: translateY(0); }
+      50%       { transform: translateY(-8px); }
+    }
+
+    /* ── SECTION HEADER ─────────────────────────────────────────── */
+    .section-header {
+      display: flex;
+      align-items: baseline;
+      gap: 18px;
+      margin-bottom: 42px;
+    }
+    .section-title {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(1.7rem, 3.5vw, 2.3rem);
+      font-weight: 800;
+      letter-spacing: -0.8px;
+      color: var(--text-dark);
+    }
+    .section-title span {
+      background: linear-gradient(110deg, var(--blue-b), var(--blue-a));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .section-line {
+      flex: 1;
+      height: 2px;
+      background: linear-gradient(90deg, rgba(91,170,249,0.4), transparent);
+      border-radius: 2px;
+    }
+
+    /* ── ABOUT ──────────────────────────────────────────────────── */
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 28px;
+    }
+
+    .about-bio-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-lg);
+      padding: 34px 36px;
+      backdrop-filter: blur(20px);
+      box-shadow: var(--shadow-card);
+      grid-column: 1 / -1;
+      line-height: 1.78;
+      font-size: 1.02rem;
+      color: var(--text-mid);
+      font-weight: 500;
+    }
+    .about-bio-card p + p { margin-top: 14px; }
+
+    .interest-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-lg);
+      padding: 26px 28px;
+      backdrop-filter: blur(20px);
+      box-shadow: var(--shadow-card);
+    }
+    .interest-card h3 {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--blue-a);
+      margin-bottom: 16px;
+    }
+    .interest-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+    }
+    .tag {
+      background: linear-gradient(110deg, rgba(79,156,249,0.1), rgba(110,198,248,0.12));
+      border: 1px solid rgba(91,170,249,0.28);
+      color: var(--blue-b);
+      font-size: 0.82rem;
+      font-weight: 700;
+      padding: 5px 13px;
+      border-radius: 999px;
+    }
+    .tag.skill {
+      background: linear-gradient(110deg, rgba(59,125,232,0.08), rgba(91,170,249,0.1));
+      border-color: rgba(59,125,232,0.22);
+      color: var(--blue-c);
+    }
+
+    /* ── PROJECTS ───────────────────────────────────────────────── */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 26px;
+    }
+
+    .project-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      backdrop-filter: blur(20px);
+      box-shadow: var(--shadow-card);
+      transition: transform 0.25s cubic-bezier(.22,.68,0,1.2), box-shadow 0.25s;
+      display: flex;
+      flex-direction: column;
+    }
+    .project-card:hover {
+      transform: translateY(-6px);
+      box-shadow: var(--shadow-hover);
+    }
+    .project-card.featured {
+      grid-column: 1 / -1;
+      display: grid;
+      grid-template-columns: 1.1fr 1fr;
+    }
+
+    .project-img-wrap {
+      position: relative;
+      overflow: hidden;
+    }
+    .project-card.featured .project-img-wrap {
+      min-height: 260px;
+    }
+    .project-card:not(.featured) .project-img-wrap {
+      height: 190px;
+    }
+
+    .project-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      background: linear-gradient(135deg, var(--sky1) 0%, var(--sky2) 100%);
+      transition: transform 0.4s ease;
+    }
+    .project-card:hover .project-img { transform: scale(1.04); }
+
+    .project-number {
+      position: absolute;
+      top: 14px;
+      left: 14px;
+      font-family: 'Syne', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      color: #fff;
+      background: linear-gradient(110deg, var(--blue-b), var(--blue-a));
+      padding: 4px 10px;
+      border-radius: 999px;
+      box-shadow: 0 3px 14px rgba(79,156,249,0.35);
+    }
+
+    .award-badge {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      background: linear-gradient(120deg, #ffe066, #ffc93c);
+      color: #5a3a00;
+      font-size: 0.72rem;
+      font-weight: 800;
+      padding: 4px 10px;
+      border-radius: 999px;
+      box-shadow: 0 3px 12px rgba(255,180,0,0.35);
+      letter-spacing: 0.04em;
+    }
+
+    .project-body {
+      padding: 26px 28px 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      flex: 1;
+    }
+
+    .project-label {
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--blue-a);
+    }
+
+    .project-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.18rem;
+      font-weight: 700;
+      color: var(--text-dark);
+      line-height: 1.25;
+      letter-spacing: -0.3px;
+    }
+
+    .project-desc {
+      font-size: 0.9rem;
+      line-height: 1.68;
+      color: var(--text-mid);
+      font-weight: 500;
+      flex: 1;
+    }
+
+    .project-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--blue-b);
+      font-size: 0.84rem;
+      font-weight: 700;
+      text-decoration: none;
+      margin-top: 4px;
+      width: fit-content;
+      transition: gap 0.2s, color 0.2s;
+    }
+    .project-link:hover { gap: 10px; color: var(--blue-a); }
+    .project-link::after { content: '→'; }
+
+    /* ── SKILLS ─────────────────────────────────────────────────── */
+    .skills-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-lg);
+      padding: 38px 40px;
+      backdrop-filter: blur(20px);
+      box-shadow: var(--shadow-card);
+    }
+
+    .skills-groups {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 32px;
+    }
+
+    .skill-group h4 {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--blue-a);
+      margin-bottom: 16px;
+      padding-bottom: 8px;
+      border-bottom: 1.5px solid rgba(91,170,249,0.22);
+    }
+
+    .skill-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .skill-item {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--text-mid);
+    }
+    .skill-item::before {
+      content: '';
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--blue-a), var(--accent));
+      flex-shrink: 0;
+    }
+
+    /* ── CONTACT ────────────────────────────────────────────────── */
+    .contact-card {
+      background: linear-gradient(135deg, rgba(255,255,255,0.8) 0%, rgba(204,229,255,0.5) 100%);
+      border: 1px solid rgba(168,212,255,0.55);
+      border-radius: var(--radius-lg);
+      padding: 58px 52px;
+      text-align: center;
+      backdrop-filter: blur(20px);
+      box-shadow: var(--shadow-card);
+      position: relative;
+      overflow: hidden;
+    }
+    .contact-card::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 500px;
+      height: 500px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(91,170,249,0.1) 0%, transparent 65%);
+      pointer-events: none;
+    }
+
+    .contact-card h3 {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(1.6rem, 3vw, 2.1rem);
+      font-weight: 800;
+      color: var(--text-dark);
+      letter-spacing: -0.6px;
+      margin-bottom: 14px;
+    }
+
+    .contact-card p {
+      font-size: 1rem;
+      color: var(--text-soft);
+      font-weight: 500;
+      max-width: 400px;
+      margin: 0 auto 32px;
+      line-height: 1.65;
+    }
+
+    .contact-links {
+      display: flex;
+      gap: 14px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    /* ── FOOTER ─────────────────────────────────────────────────── */
+    footer {
+      text-align: center;
+      padding: 40px 20px 20px;
+      font-size: 0.82rem;
+      color: var(--text-soft);
+      font-weight: 500;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ── FADE-IN ANIMATION ──────────────────────────────────────── */
+    .fade-up {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .fade-up.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ── RESPONSIVE ─────────────────────────────────────────────── */
+    @media (max-width: 760px) {
+      nav { padding: 0 22px; }
+      .nav-links { gap: 18px; }
+
+      #hero {
+        grid-template-columns: 1fr;
+        text-align: center;
+        padding-top: 100px;
+      }
+      .hero-image-wrap { order: -1; }
+      .hero-badge, .hero-cta-row { justify-content: center; }
+      .hero-tagline { margin: 0 auto; }
+      .chip-1, .chip-2, .chip-3 { display: none; }
+
+      .about-grid { grid-template-columns: 1fr; }
+      .about-bio-card { grid-column: 1; }
+
+      .projects-grid { grid-template-columns: 1fr; }
+      .project-card.featured {
+        grid-template-columns: 1fr;
+        grid-column: 1;
+      }
+
+      .skills-groups { grid-template-columns: 1fr 1fr; }
+      .contact-card { padding: 40px 28px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <span class="nav-logo">Eden Chen</span>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <main>
+
+    <!-- ── HERO ── -->
+    <section id="hero">
+      <div class="hero-text fade-up">
+        <div class="hero-badge">NYU Stern · BTE Program</div>
+        <h1 class="hero-name">Eden<br/>Chen</h1>
+        <p class="hero-tagline">
+          Freshman at <strong>NYU Stern</strong> exploring the intersection of
+          business, technology, and entrepreneurship — with a growing passion for
+          <strong>Product Management</strong>.
+        </p>
+        <div class="hero-cta-row">
+          <a href="#projects" class="btn btn-primary">View Projects</a>
+          <a href="#contact" class="btn btn-outline">Let's Connect</a>
+        </div>
+      </div>
+
+      <div class="hero-image-wrap fade-up" style="animation-delay:0.15s">
+        <img
+          src="images/headshot.jpg"
+          alt="Eden Chen smiling in a professional headshot photo"
+          class="hero-img"
+        />
+        <span class="chip-float chip-1">🎮 Valorant @ NYU</span>
+        <span class="chip-float chip-2">🏔️ Smoky Mountains</span>
+        <span class="chip-float chip-3">📦 PM Enthusiast</span>
+      </div>
+    </section>
+
+    <!-- ── ABOUT ── -->
+    <section id="about">
+      <div class="section-header fade-up">
+        <h2 class="section-title">About <span>Me</span></h2>
+        <div class="section-line"></div>
+      </div>
+
+      <div class="about-grid">
+        <div class="about-bio-card fade-up">
+          <p>
+            Born and raised in the Smoky Mountains of North Carolina, I grew up surrounded by nature — hiking trails, mountain air, and a deeply curious mind that loved strategy games and competition. Basketball courts and gaming sessions shaped how I think: quickly, collaboratively, and with an eye for what moves the needle.
+          </p>
+          <p>
+            Now at NYU Stern's Business, Technology & Entrepreneurship program, I'm channeling that same competitive spirit into the world of startups and product. I'm currently deep-diving into Product Management, captivated by the way great PMs sit at the intersection of user empathy, business strategy, and technical craft.
+          </p>
+          <p>
+            When I'm not grinding coursework or prototyping product ideas, you'll find me trying a new restaurant in the city, playing pickup basketball, or fragging out in Valorant as part of NYU's esports team.
+          </p>
+        </div>
+
+        <div class="interest-card fade-up">
+          <h3>Interests</h3>
+          <div class="interest-tags">
+            <span class="tag">🏀 Basketball</span>
+            <span class="tag">🎮 Gaming & Esports</span>
+            <span class="tag">🥾 Hiking</span>
+            <span class="tag">♟️ Strategy Board Games</span>
+            <span class="tag">🍜 Trying New Foods</span>
+            <span class="tag">🎯 Valorant</span>
+            <span class="tag">📱 Product Thinking</span>
+          </div>
+        </div>
+
+        <div class="interest-card fade-up">
+          <h3>Currently</h3>
+          <div class="interest-tags">
+            <span class="tag">📦 Exploring PM</span>
+            <span class="tag">🎓 BTE @ NYU Stern</span>
+            <span class="tag">🕹️ NYU Esports Team</span>
+            <span class="tag">🚀 Building Projects</span>
+            <span class="tag">🌏 Bilingual: Mandarin</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── PROJECTS ── -->
+    <section id="projects">
+      <div class="section-header fade-up">
+        <h2 class="section-title">Featured <span>Projects</span></h2>
+        <div class="section-line"></div>
+      </div>
+
+      <div class="projects-grid">
+
+        <!-- Project 1: Toki — Featured -->
+        <div class="project-card featured fade-up">
+          <div class="project-img-wrap">
+            <img
+              src="images/project-1.jpg"
+              alt="Toki — a Tamagotchi-style physical gadget that encourages children to go outside and get sunlight to keep their virtual pet alive"
+              class="project-img"
+            />
+            <span class="project-number">01</span>
+            <span class="award-badge">🏆 1st Place</span>
+          </div>
+          <div class="project-body">
+            <span class="project-label">BTE Age of AI Hackathon</span>
+            <h3 class="project-title">Toki — Bridging Digital Play & Physical Well-being</h3>
+            <p class="project-desc">
+              We built Toki, a Tamagotchi-style gadget that requires real sunlight and outdoor activity to keep the virtual pet alive — turning "screen time" into "sun time." Designed to address the developmental challenges modern children face from insufficient unstructured play and sun exposure.
+            </p>
+            <a href="https://docs.google.com/presentation/d/1IYM0sbIusUrmbLBCUNrQlPCG2qbsiy72qzXS2N5mrMY/edit?usp=sharing"
+               target="_blank" rel="noopener" class="project-link">View Presentation</a>
+          </div>
+        </div>
+
+        <!-- Project 2: Kalshi -->
+        <div class="project-card fade-up">
+          <div class="project-img-wrap">
+            <img
+              src="images/project-2.jpg"
+              alt="Kalshi product management pitch deck showing market analysis, UX wireframes, and strategic recommendations for the prediction market platform"
+              class="project-img"
+            />
+            <span class="project-number">02</span>
+          </div>
+          <div class="project-body">
+            <span class="project-label">PM Club Feature Pitch</span>
+            <h3 class="project-title">Kalshi — Product Strategy Deep-Dive</h3>
+            <p class="project-desc">
+              Leveraged market analysis and UX prototyping to pitch 10+ app frameworks. Delivered a business analysis pinpointing Kalshi's competitive edge, translating stakeholder interviews into five actionable strategic recommendations.
+            </p>
+            <a href="https://pitch.com/v/kalshi--pmc-eden-c-bjsurn"
+               target="_blank" rel="noopener" class="project-link">View Pitch</a>
+          </div>
+        </div>
+
+        <!-- Project 3: BAC -->
+        <div class="project-card fade-up">
+          <div class="project-img-wrap">
+            <img
+              src="images/project-3.jpg"
+              alt="Stern Business Analytics Club project showing data visualizations and financial correlation models built from the Fortune 2021-2022 dataset"
+              class="project-img"
+            />
+            <span class="project-number">03</span>
+          </div>
+          <div class="project-body">
+            <span class="project-label">Stern BAC · FLP Final Project</span>
+            <h3 class="project-title">Fortune 500 Financial Correlation Analysis</h3>
+            <p class="project-desc">
+              Analyzed the Fortune 2021–2022 dataset and built multiple statistical models to uncover correlations between key financial variables. Presented findings as part of the Freshman Liaison Program.
+            </p>
+            <a href="https://www.figma.com/deck/iYDlGSmil9oYpnjpIxAzp3/BAC-FLP-Final-Project---Eden-Chen"
+               target="_blank" rel="noopener" class="project-link">View Project</a>
+          </div>
+        </div>
+
+        <!-- Project 4: UGC -->
+        <div class="project-card fade-up" style="grid-column: 1 / -1;">
+          <div style="display:grid; grid-template-columns: 1.1fr 1fr; overflow:hidden; border-radius: var(--radius-lg);">
+            <div class="project-img-wrap" style="min-height: 220px;">
+              <img
+                src="images/project-4.jpg"
+                alt="Short-form video content for Axal and Dub fintech startups on TikTok and Instagram, showing finance concepts explained in engaging social media format"
+                class="project-img"
+              />
+              <span class="project-number">04</span>
+            </div>
+            <div class="project-body">
+              <span class="project-label">Content Marketing · Fintech</span>
+              <h3 class="project-title">UGC Engine for Axal & Dub</h3>
+              <p class="project-desc">
+                Spearheaded a high-volume UGC engine for Axal (crypto fintech) and Dub (fintech), producing 3+ weekly videos that generated 30K+ views and drove core social growth. Owned the full creative lifecycle — translating complex fintech concepts into high-engagement TikTok and Instagram content.
+              </p>
+              <div class="interest-tags" style="margin-top: 4px;">
+                <span class="tag">📱 TikTok</span>
+                <span class="tag">📸 Instagram</span>
+                <span class="tag">30K+ Views</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ── SKILLS ── -->
+    <section id="skills">
+      <div class="section-header fade-up">
+        <h2 class="section-title">Skills &amp; <span>Tools</span></h2>
+        <div class="section-line"></div>
+      </div>
+
+      <div class="skills-card fade-up">
+        <div class="skills-groups">
+          <div class="skill-group">
+            <h4>Product & Strategy</h4>
+            <div class="skill-list">
+              <span class="skill-item">Product Management</span>
+              <span class="skill-item">UX Research</span>
+              <span class="skill-item">Project Planning</span>
+              <span class="skill-item">Market Analysis</span>
+              <span class="skill-item">Problem Solving</span>
+            </div>
+          </div>
+          <div class="skill-group">
+            <h4>Technical</h4>
+            <div class="skill-list">
+              <span class="skill-item">Python</span>
+              <span class="skill-item">Figma</span>
+              <span class="skill-item">Google Suites</span>
+              <span class="skill-item">Microsoft Suites</span>
+              <span class="skill-item">CapCut</span>
+            </div>
+          </div>
+          <div class="skill-group">
+            <h4>Soft Skills & Languages</h4>
+            <div class="skill-list">
+              <span class="skill-item">Bilingual: Mandarin</span>
+              <span class="skill-item">Content Marketing</span>
+              <span class="skill-item">Time Management</span>
+              <span class="skill-item">Communication</span>
+              <span class="skill-item">Strategic Thinking</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── CONTACT ── -->
+    <section id="contact">
+      <div class="section-header fade-up">
+        <h2 class="section-title">Get in <span>Touch</span></h2>
+        <div class="section-line"></div>
+      </div>
+
+      <div class="contact-card fade-up">
+        <h3>Let's build something together.</h3>
+        <p>Whether you're looking to collaborate, chat product, or just say hello — my inbox is always open.</p>
+        <div class="contact-links">
+          <a href="mailto:cheneden1234@gmail.com" class="btn btn-primary">✉ Email Me</a>
+          <a href="https://www.linkedin.com/in/cheneden/" target="_blank" rel="noopener" class="btn btn-outline">LinkedIn →</a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <p>© 2025 Eden Chen &nbsp;·&nbsp; NYU Stern BTE &nbsp;·&nbsp; Built with care ☁️</p>
+  </footer>
+
+  <script>
+    // Intersection Observer for fade-up animations
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry, i) => {
+        if (entry.isIntersecting) {
+          setTimeout(() => entry.target.classList.add('visible'), i * 80);
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12 });
+
+    document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+    // Smooth active state for nav (optional polish)
+    const sections = document.querySelectorAll('section[id]');
+    const navLinks = document.querySelectorAll('.nav-links a');
+    const onScroll = () => {
+      let current = '';
+      sections.forEach(s => {
+        if (window.scrollY >= s.offsetTop - 90) current = s.id;
+      });
+      navLinks.forEach(a => {
+        a.style.color = a.getAttribute('href') === '#' + current
+          ? 'var(--blue-a)' : '';
+      });
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+  </script>
+</body>
+</html>
