@@ -5,66 +5,109 @@
   <title>Eden Chen — Portfolio</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=Syne:wght@600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&family=Syne:wght@600;700;800&display=swap" rel="stylesheet" />
 
   <style>
-    /* ── TOKENS ────────────────────────────────────────────────── */
+    /* TOKENS */
     :root {
-      --sky0:   #e8f4ff;
-      --sky1:   #cce5ff;
-      --sky2:   #a8d4ff;
-      --sky3:   #7bb8f5;
+      --bg:        #0a0c10;
+      --bg-soft:   #0d1016;
+      --surface:   #11151c;
+      --surface-2: #151a22;
+      --border:    rgba(148,163,184,0.14);
+      --border-hi: rgba(148,163,184,0.28);
 
-      --blue-a: #4f9cf9;
-      --blue-b: #3b7de8;
-      --blue-c: #2256c7;
-      --blue-mid: #5baaf9;
+      --text:      #e7ecf3;
+      --text-mid:  #97a3b5;
+      --text-soft: #5c6779;
 
-      --accent:  #7fd4f9;
-      --glow:    rgba(91,170,249,0.28);
+      --accent:    #46f2a6;
+      --accent-b:  #33d6ff;
+      --accent-2:  #9b8cff;
+      --gold:      #ffcf5c;
 
-      --white:   #ffffff;
-      --card-bg: rgba(255,255,255,0.72);
-      --card-border: rgba(180,214,255,0.55);
+      --glow:      rgba(70,242,166,0.16);
+      --glow-2:    rgba(155,140,255,0.16);
 
-      --text-dark: #1a2d4f;
-      --text-mid:  #3b5a8a;
-      --text-soft: #6b8db8;
-
-      --radius-lg: 22px;
-      --radius-sm: 12px;
-      --shadow-card: 0 6px 32px rgba(79,156,249,0.13), 0 1.5px 6px rgba(79,156,249,0.09);
-      --shadow-hover: 0 14px 48px rgba(79,156,249,0.22), 0 3px 14px rgba(79,156,249,0.14);
+      --radius-lg: 18px;
+      --radius-sm: 10px;
+      --mono: 'JetBrains Mono', ui-monospace, monospace;
+      --sans: 'Inter', sans-serif;
+      --display: 'Syne', sans-serif;
     }
 
-    /* ── RESET ─────────────────────────────────────────────────── */
+    /* RESET */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
+    ::selection { background: var(--accent); color: #05130c; }
 
-    /* ── BODY / SKY BACKGROUND ─────────────────────────────────── */
     body {
-      font-family: 'Nunito', sans-serif;
-      color: var(--text-dark);
+      font-family: var(--sans);
+      color: var(--text);
+      background: var(--bg);
       min-height: 100vh;
-      background:
-        radial-gradient(ellipse 80% 60% at 50% -10%, #b8dcff 0%, transparent 70%),
-        radial-gradient(ellipse 60% 50% at 85% 10%,  #cce9ff 0%, transparent 65%),
-        radial-gradient(ellipse 50% 40% at 15% 20%,  #d9eeff 0%, transparent 60%),
-        linear-gradient(175deg, #ddf0ff 0%, #eef7ff 38%, #f5fbff 65%, #eaf4ff 100%);
       overflow-x: hidden;
+      position: relative;
     }
 
-    /* ── NOISE TEXTURE OVERLAY ─────────────────────────────────── */
-    body::before {
-      content: '';
+    /* AMBIENT BACKGROUND */
+    .bg-grid {
       position: fixed;
       inset: 0;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
-      pointer-events: none;
       z-index: 0;
+      background-image:
+        linear-gradient(rgba(148,163,184,0.055) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(148,163,184,0.055) 1px, transparent 1px);
+      background-size: 42px 42px;
+      mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, black 40%, transparent 85%);
+      pointer-events: none;
+    }
+    .bg-blob {
+      position: fixed;
+      z-index: 0;
+      border-radius: 50%;
+      filter: blur(90px);
+      pointer-events: none;
+      opacity: 0.5;
+      will-change: transform;
+    }
+    .blob-a { width: 480px; height: 480px; top: -160px; left: -120px; background: var(--glow); animation: drift-a 22s ease-in-out infinite; }
+    .blob-b { width: 420px; height: 420px; top: 220px; right: -160px; background: var(--glow-2); animation: drift-b 26s ease-in-out infinite; }
+    .blob-c { width: 360px; height: 360px; bottom: -140px; left: 30%; background: rgba(70,242,166,0.10); animation: drift-c 30s ease-in-out infinite; }
+
+    @keyframes drift-a { 0%,100% { transform: translate(0,0); } 50% { transform: translate(60px, 40px); } }
+    @keyframes drift-b { 0%,100% { transform: translate(0,0); } 50% { transform: translate(-50px, 60px); } }
+    @keyframes drift-c { 0%,100% { transform: translate(0,0); } 50% { transform: translate(40px, -50px); } }
+
+    .noise {
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      opacity: 0.035;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E");
     }
 
-    /* ── NAV ────────────────────────────────────────────────────── */
+    /* CUSTOM CURSOR */
+    .cursor-dot, .cursor-ring {
+      position: fixed;
+      top: 0; left: 0;
+      z-index: 999;
+      pointer-events: none;
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      will-change: transform;
+    }
+    .cursor-dot { width: 6px; height: 6px; background: var(--accent); box-shadow: 0 0 10px var(--accent); }
+    .cursor-ring {
+      width: 32px; height: 32px;
+      border: 1.5px solid rgba(70,242,166,0.5);
+      transition: width 0.2s, height 0.2s, border-color 0.2s, background 0.2s;
+    }
+    .cursor-ring.active { width: 52px; height: 52px; background: rgba(70,242,166,0.08); border-color: var(--accent-b); }
+    body.has-cursor, body.has-cursor a, body.has-cursor button { cursor: none; }
+
+    /* NAV */
     nav {
       position: fixed;
       top: 0; left: 0; right: 0;
@@ -73,570 +116,490 @@
       align-items: center;
       justify-content: space-between;
       padding: 0 48px;
-      height: 64px;
-      background: rgba(232,244,255,0.72);
-      backdrop-filter: blur(18px);
-      -webkit-backdrop-filter: blur(18px);
-      border-bottom: 1px solid rgba(180,214,255,0.45);
+      height: 62px;
+      background: rgba(10,12,16,0.72);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border);
     }
-
     .nav-logo {
-      font-family: 'Syne', sans-serif;
-      font-weight: 800;
-      font-size: 1.15rem;
-      background: linear-gradient(110deg, var(--blue-c), var(--blue-a), var(--accent));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      letter-spacing: -0.5px;
-    }
-
-    .nav-links { display: flex; gap: 32px; list-style: none; }
-    .nav-links a {
-      font-size: 0.88rem;
+      font-family: var(--mono);
       font-weight: 600;
-      color: var(--text-mid);
-      text-decoration: none;
-      letter-spacing: 0.02em;
-      transition: color 0.2s;
-    }
-    .nav-links a:hover { color: var(--blue-a); }
-
-    /* ── MAIN WRAPPER ───────────────────────────────────────────── */
-    main {
-      position: relative;
-      z-index: 1;
-      max-width: 1060px;
-      margin: 0 auto;
-      padding: 0 28px 80px;
-    }
-
-    /* ── SECTION SPACING ─────────────────────────────────────────── */
-    section { padding-top: 110px; }
-
-    /* ── HERO ───────────────────────────────────────────────────── */
-    #hero {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 48px;
+      font-size: 0.95rem;
+      color: var(--text);
+      letter-spacing: -0.02em;
+      display: flex;
       align-items: center;
-      padding-top: 130px;
-      padding-bottom: 20px;
+      gap: 9px;
     }
-
-    .hero-text { display: flex; flex-direction: column; gap: 20px; }
-
-    .hero-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 7px;
-      background: linear-gradient(100deg, rgba(91,170,249,0.18), rgba(123,184,245,0.12));
-      border: 1px solid rgba(91,170,249,0.35);
-      color: var(--blue-b);
-      font-size: 0.78rem;
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      padding: 6px 14px;
-      border-radius: 999px;
-      width: fit-content;
-      backdrop-filter: blur(6px);
+    .status-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 8px var(--accent);
+      animation: pulse-dot 2s ease-in-out infinite;
+      flex-shrink: 0;
     }
-    .hero-badge::before {
-      content: '◈';
-      font-size: 0.7rem;
-      color: var(--blue-a);
-    }
+    @keyframes pulse-dot { 0%,100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.55; transform: scale(0.82); } }
+    .nav-logo span { color: var(--accent); }
 
-    .hero-name {
-      font-family: 'Syne', sans-serif;
-      font-size: clamp(2.8rem, 5.5vw, 4.2rem);
-      font-weight: 800;
-      line-height: 1.05;
-      letter-spacing: -1.5px;
-      background: linear-gradient(135deg, var(--blue-c) 0%, var(--blue-a) 55%, var(--accent) 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-
-    .hero-tagline {
-      font-size: 1.08rem;
+    .nav-links { display: flex; gap: 30px; list-style: none; }
+    .nav-links a {
+      font-family: var(--mono);
+      font-size: 0.8rem;
       font-weight: 500;
       color: var(--text-mid);
-      line-height: 1.65;
-      max-width: 420px;
+      text-decoration: none;
+      letter-spacing: 0.01em;
+      transition: color 0.2s;
+      position: relative;
+    }
+    .nav-links a::before { content: '['; color: var(--text-soft); margin-right: 3px; opacity: 0; transition: opacity 0.2s; }
+    .nav-links a::after { content: ']'; color: var(--text-soft); margin-left: 3px; opacity: 0; transition: opacity 0.2s; }
+    .nav-links a:hover { color: var(--accent); }
+    .nav-links a:hover::before, .nav-links a:hover::after { opacity: 1; }
+
+    /* MAIN WRAPPER */
+    main { position: relative; z-index: 2; max-width: 1080px; margin: 0 auto; padding: 0 28px 100px; }
+    section { padding-top: 120px; }
+
+    .eyebrow {
+      font-family: var(--mono);
+      font-size: 0.82rem;
+      font-weight: 500;
+      color: var(--accent);
+      letter-spacing: 0.02em;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .eyebrow::before { content: '>'; color: var(--text-soft); }
+    .blink-cursor {
+      display: inline-block;
+      width: 8px; height: 1.1em;
+      background: var(--accent);
+      margin-left: 2px;
+      animation: blink 1s step-end infinite;
+      vertical-align: text-bottom;
+    }
+    @keyframes blink { 0%,49% { opacity: 1; } 50%,100% { opacity: 0; } }
+
+    /* HERO */
+    #hero {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 40px;
+      align-items: center;
+      padding-top: 148px;
+      padding-bottom: 10px;
+      min-height: 90vh;
+    }
+    .hero-text { display: flex; flex-direction: column; gap: 22px; }
+
+    .hero-name {
+      font-family: var(--display);
+      font-size: clamp(2.6rem, 6vw, 4.4rem);
+      font-weight: 800;
+      line-height: 1.02;
+      letter-spacing: -2px;
+      background: linear-gradient(120deg, #ffffff 20%, var(--accent) 65%, var(--accent-b) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
     }
 
-    .hero-tagline strong {
-      color: var(--blue-b);
-      font-weight: 700;
+    .hero-type-row {
+      font-family: var(--mono);
+      font-size: clamp(1rem, 2vw, 1.25rem);
+      font-weight: 500;
+      color: var(--text-mid);
+      min-height: 1.6em;
+      display: flex;
+      align-items: center;
     }
+    .hero-type-row .type-text { color: var(--accent-b); }
 
-    .hero-cta-row { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 6px; }
+    .hero-desc {
+      font-size: 1rem;
+      color: var(--text-mid);
+      line-height: 1.7;
+      max-width: 460px;
+    }
+    .hero-desc strong { color: var(--text); font-weight: 600; }
+
+    .hero-cta-row { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 6px; }
 
     .btn {
       display: inline-flex;
       align-items: center;
-      gap: 7px;
-      padding: 11px 24px;
-      border-radius: 999px;
-      font-family: 'Nunito', sans-serif;
-      font-size: 0.88rem;
-      font-weight: 700;
+      gap: 8px;
+      padding: 12px 22px;
+      border-radius: var(--radius-sm);
+      font-family: var(--mono);
+      font-size: 0.84rem;
+      font-weight: 600;
       text-decoration: none;
       cursor: pointer;
-      border: none;
-      transition: transform 0.18s, box-shadow 0.18s;
-    }
-    .btn:hover { transform: translateY(-2px); }
-
-    .btn-primary {
-      background: linear-gradient(110deg, var(--blue-b), var(--blue-a), #6ec6f8);
-      color: #fff;
-      box-shadow: 0 4px 20px rgba(79,156,249,0.38);
-    }
-    .btn-primary:hover { box-shadow: 0 8px 32px rgba(79,156,249,0.52); }
-
-    .btn-outline {
-      background: rgba(255,255,255,0.65);
-      color: var(--blue-b);
-      border: 1.5px solid rgba(91,170,249,0.45);
-      backdrop-filter: blur(8px);
-    }
-    .btn-outline:hover { background: rgba(255,255,255,0.9); }
-
-    /* ── HERO IMAGE ─────────────────────────────────────────────── */
-    .hero-image-wrap {
+      border: 1px solid var(--border-hi);
+      background: transparent;
+      color: var(--text);
+      transition: border-color 0.25s, background 0.25s, color 0.25s;
       position: relative;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      will-change: transform;
     }
+    .btn:hover { border-color: var(--accent); color: var(--accent); }
+    .btn-primary { background: var(--accent); color: #06140d; border-color: var(--accent); }
+    .btn-primary:hover { background: var(--accent-b); border-color: var(--accent-b); color: #06140d; }
 
+    /* HERO IMAGE */
+    .hero-image-wrap { position: relative; display: flex; justify-content: center; align-items: center; }
+    .hero-img-frame {
+      position: relative;
+      width: clamp(220px, 28vw, 300px);
+      height: clamp(220px, 28vw, 300px);
+      clip-path: polygon(25% 0%, 75% 0%, 100% 25%, 100% 75%, 75% 100%, 25% 100%, 0% 75%, 0% 25%);
+      background: linear-gradient(140deg, var(--accent), var(--accent-2));
+      padding: 3px;
+    }
+    .hero-img-frame img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      clip-path: polygon(25% 0%, 75% 0%, 100% 25%, 100% 75%, 75% 100%, 25% 100%, 0% 75%, 0% 25%);
+      display: block;
+      background: var(--surface);
+    }
     .hero-image-wrap::before {
       content: '';
       position: absolute;
-      inset: -18px;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(91,170,249,0.22) 0%, transparent 70%);
-      animation: pulse-glow 3.5s ease-in-out infinite;
+      inset: -30px;
+      background: radial-gradient(circle, var(--glow) 0%, transparent 70%);
+      z-index: -1;
+      animation: pulse-glow 4s ease-in-out infinite;
     }
+    @keyframes pulse-glow { 0%,100% { transform: scale(1); opacity: 0.7; } 50% { transform: scale(1.08); opacity: 1; } }
 
-    @keyframes pulse-glow {
-      0%, 100% { transform: scale(1); opacity: 0.7; }
-      50%        { transform: scale(1.06); opacity: 1; }
-    }
-
-    .hero-img {
-      width: clamp(220px, 34vw, 320px);
-      height: clamp(220px, 34vw, 320px);
-      border-radius: 50%;
-      object-fit: cover;
-      border: 3px solid rgba(255,255,255,0.85);
-      box-shadow: 0 12px 52px rgba(79,156,249,0.22), 0 0 0 8px rgba(168,212,255,0.35);
-      display: block;
-      background: linear-gradient(135deg, var(--sky1), var(--sky2));
-    }
-
-    /* ── FLOATING CHIPS ─────────────────────────────────────────── */
     .chip-float {
       position: absolute;
-      background: rgba(255,255,255,0.82);
-      border: 1px solid rgba(168,212,255,0.6);
-      border-radius: 999px;
-      padding: 7px 14px;
-      font-size: 0.75rem;
-      font-weight: 700;
-      color: var(--blue-b);
-      backdrop-filter: blur(10px);
-      box-shadow: 0 4px 18px rgba(79,156,249,0.14);
+      background: var(--surface);
+      border: 1px solid var(--border-hi);
+      border-radius: 8px;
+      padding: 6px 12px;
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      font-weight: 500;
+      color: var(--accent);
       white-space: nowrap;
-      animation: float-bob 4s ease-in-out infinite;
+      animation: float-bob 4.5s ease-in-out infinite;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.35);
     }
-    .chip-1 { top: 14%;  right: -6%; animation-delay: 0s; }
-    .chip-2 { bottom: 18%; left: -8%; animation-delay: 1.4s; }
-    .chip-3 { top: 62%; right: -10%; animation-delay: 2.2s; }
-    .chip-4 { top: 0%; left: -2%; animation-delay: 0.8s; } /* Top left */
+    .chip-1 { top: 8%;  right: -8%; animation-delay: 0s; }
+    .chip-2 { bottom: 12%; left: -12%; animation-delay: 1.4s; }
+    .chip-3 { top: 58%; right: -14%; animation-delay: 2.2s; }
+    .chip-4 { top: -4%; left: -4%; animation-delay: 0.8s; }
+    @keyframes float-bob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-9px); } }
 
-    @keyframes float-bob {
-      0%, 100% { transform: translateY(0); }
-      50%        { transform: translateY(-8px); }
-    }
-
-    /* ── SECTION HEADER ─────────────────────────────────────────── */
-    .section-header {
-      display: flex;
-      align-items: baseline;
-      gap: 18px;
-      margin-bottom: 42px;
-    }
-    .section-title {
-      font-family: 'Syne', sans-serif;
-      font-size: clamp(1.7rem, 3.5vw, 2.3rem);
-      font-weight: 800;
-      letter-spacing: -0.8px;
-      color: var(--text-dark);
-    }
-    .section-title span {
-      background: linear-gradient(110deg, var(--blue-b), var(--blue-a));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-    .section-line {
-      flex: 1;
-      height: 2px;
-      background: linear-gradient(90deg, rgba(91,170,249,0.4), transparent);
-      border-radius: 2px;
-    }
-
-    /* ── ABOUT ──────────────────────────────────────────────────── */
-    .about-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 28px;
-    }
-
-    .about-bio-card {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: var(--radius-lg);
-      padding: 34px 36px;
-      backdrop-filter: blur(20px);
-      box-shadow: var(--shadow-card);
-      grid-column: 1 / -1;
-      line-height: 1.78;
-      font-size: 1.02rem;
-      color: var(--text-mid);
-      font-weight: 500;
-    }
-    .about-bio-card p + p { margin-top: 14px; }
-
-    .interest-card {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: var(--radius-lg);
-      padding: 26px 28px;
-      backdrop-filter: blur(20px);
-      box-shadow: var(--shadow-card);
-    }
-    .interest-card h3 {
-      font-family: 'Syne', sans-serif;
-      font-size: 0.78rem;
-      font-weight: 700;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--blue-a);
-      margin-bottom: 16px;
-    }
-    .interest-tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 9px;
-    }
-    .tag {
-      background: linear-gradient(110deg, rgba(79,156,249,0.1), rgba(110,198,248,0.12));
-      border: 1px solid rgba(91,170,249,0.28);
-      color: var(--blue-b);
-      font-size: 0.82rem;
-      font-weight: 700;
-      padding: 5px 13px;
-      border-radius: 999px;
-    }
-    .tag.skill {
-      background: linear-gradient(110deg, rgba(59,125,232,0.08), rgba(91,170,249,0.1));
-      border-color: rgba(59,125,232,0.22);
-      color: var(--blue-c);
-    }
-
-    /* ── PROJECTS ───────────────────────────────────────────────── */
-    .projects-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 26px;
-    }
-
-    .project-card {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: var(--radius-lg);
-      overflow: hidden;
-      backdrop-filter: blur(20px);
-      box-shadow: var(--shadow-card);
-      transition: transform 0.25s cubic-bezier(.22,.68,0,1.2), box-shadow 0.25s;
-      display: flex;
-      flex-direction: column;
-    }
-    .project-card:hover {
-      transform: translateY(-6px);
-      box-shadow: var(--shadow-hover);
-    }
-    .project-card.featured {
-      grid-column: 1 / -1;
-      display: grid;
-      grid-template-columns: 1.1fr 1fr;
-    }
-
-    .project-img-wrap {
+    /* TICKER */
+    .ticker-wrap {
       position: relative;
+      z-index: 2;
+      width: 100vw;
+      margin-left: calc(50% - 50vw);
+      margin-right: calc(50% - 50vw);
       overflow: hidden;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      background: var(--bg-soft);
+      padding: 16px 0;
+      margin-top: 30px;
     }
-    .project-card.featured .project-img-wrap {
-      min-height: 260px;
-    }
-    .project-card:not(.featured) .project-img-wrap {
-      height: 190px;
-    }
-
-    .project-img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-      background: linear-gradient(135deg, var(--sky1) 0%, var(--sky2) 100%);
-      transition: transform 0.4s ease;
-    }
-    .project-card:hover .project-img { transform: scale(1.04); }
-
-    .project-number {
-      position: absolute;
-      top: 14px;
-      left: 14px;
-      font-family: 'Syne', sans-serif;
-      font-size: 0.72rem;
-      font-weight: 700;
-      letter-spacing: 0.1em;
-      color: #fff;
-      background: linear-gradient(110deg, var(--blue-b), var(--blue-a));
-      padding: 4px 10px;
-      border-radius: 999px;
-      box-shadow: 0 3px 14px rgba(79,156,249,0.35);
-    }
-
-    .award-badge {
-      position: absolute;
-      top: 14px;
-      right: 14px;
-      background: linear-gradient(120deg, #ffe066, #ffc93c);
-      color: #5a3a00;
-      font-size: 0.72rem;
-      font-weight: 800;
-      padding: 4px 10px;
-      border-radius: 999px;
-      box-shadow: 0 3px 12px rgba(255,180,0,0.35);
-      letter-spacing: 0.04em;
-    }
-
-    .project-body {
-      padding: 26px 28px 28px;
+    .ticker-track {
       display: flex;
-      flex-direction: column;
-      gap: 12px;
-      flex: 1;
+      width: max-content;
+      animation: ticker-scroll 26s linear infinite;
+      gap: 0;
     }
-
-    .project-label {
-      font-size: 0.72rem;
-      font-weight: 800;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--blue-a);
-    }
-
-    .project-title {
-      font-family: 'Syne', sans-serif;
-      font-size: 1.18rem;
-      font-weight: 700;
-      color: var(--text-dark);
-      line-height: 1.25;
-      letter-spacing: -0.3px;
-    }
-
-    .project-desc {
-      font-size: 0.9rem;
-      line-height: 1.68;
-      color: var(--text-mid);
-      font-weight: 500;
-      flex: 1;
-    }
-
-    .project-link {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      color: var(--blue-b);
-      font-size: 0.84rem;
-      font-weight: 700;
-      text-decoration: none;
-      margin-top: 4px;
-      width: fit-content;
-      transition: gap 0.2s, color 0.2s;
-    }
-    .project-link:hover { gap: 10px; color: var(--blue-a); }
-    .project-link::after { content: '→'; }
-
-    /* ── SKILLS ─────────────────────────────────────────────────── */
-    .skills-card {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: var(--radius-lg);
-      padding: 38px 40px;
-      backdrop-filter: blur(20px);
-      box-shadow: var(--shadow-card);
-    }
-
-    .skills-groups {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 32px;
-    }
-
-    .skill-group h4 {
-      font-family: 'Syne', sans-serif;
-      font-size: 0.75rem;
-      font-weight: 700;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--blue-a);
-      margin-bottom: 16px;
-      padding-bottom: 8px;
-      border-bottom: 1.5px solid rgba(91,170,249,0.22);
-    }
-
-    .skill-list {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    .skill-item {
-      display: flex;
-      align-items: center;
-      gap: 9px;
-      font-size: 0.88rem;
+    .ticker-wrap:hover .ticker-track { animation-play-state: paused; }
+    @keyframes ticker-scroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+    .ticker-item {
+      font-family: var(--mono);
+      font-size: 0.86rem;
       font-weight: 600;
-      color: var(--text-mid);
+      color: var(--text-soft);
+      letter-spacing: 0.06em;
+      padding: 0 22px;
+      display: flex;
+      align-items: center;
+      gap: 22px;
+      white-space: nowrap;
     }
-    .skill-item::before {
-      content: '';
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, var(--blue-a), var(--accent));
-      flex-shrink: 0;
-    }
+    .ticker-item::after { content: '◆'; color: var(--accent); font-size: 0.6rem; }
 
-    /* ── CONTACT ────────────────────────────────────────────────── */
-    .contact-card {
-      background: linear-gradient(135deg, rgba(255,255,255,0.8) 0%, rgba(204,229,255,0.5) 100%);
-      border: 1px solid rgba(168,212,255,0.55);
-      border-radius: var(--radius-lg);
-      padding: 58px 52px;
-      text-align: center;
-      backdrop-filter: blur(20px);
-      box-shadow: var(--shadow-card);
-      position: relative;
-      overflow: hidden;
+    /* SECTION HEADER */
+    .section-header { display: flex; align-items: baseline; gap: 16px; margin-bottom: 40px; margin-top: 6px; }
+    .section-title {
+      font-family: var(--display);
+      font-size: clamp(1.6rem, 3.2vw, 2.1rem);
+      font-weight: 800;
+      letter-spacing: -0.6px;
+      color: var(--text);
     }
-    .contact-card::before {
+    .section-title span { color: var(--accent); }
+    .section-num { font-family: var(--mono); color: var(--text-soft); font-size: 0.85rem; }
+    .section-line { flex: 1; height: 1px; background: linear-gradient(90deg, var(--border-hi), transparent); }
+
+    /* SPOTLIGHT CARD BASE */
+    .spot-card {
+      position: relative;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      transition: border-color 0.25s, transform 0.25s;
+    }
+    .spot-card::before {
       content: '';
       position: absolute;
-      top: -50%;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 500px;
-      height: 500px;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(91,170,249,0.1) 0%, transparent 65%);
+      inset: 0;
+      background: radial-gradient(320px circle at var(--mx,50%) var(--my,50%), rgba(70,242,166,0.10), transparent 65%);
+      opacity: 0;
+      transition: opacity 0.3s;
       pointer-events: none;
     }
+    .spot-card:hover::before { opacity: 1; }
+    .spot-card:hover { border-color: var(--border-hi); }
 
-    .contact-card h3 {
-      font-family: 'Syne', sans-serif;
-      font-size: clamp(1.6rem, 3vw, 2.1rem);
-      font-weight: 800;
-      color: var(--text-dark);
-      letter-spacing: -0.6px;
-      margin-bottom: 14px;
+    /* ABOUT */
+    .about-grid { display: grid; grid-template-columns: 1.3fr 1fr; gap: 24px; }
+    .about-bio-card { padding: 32px 34px; line-height: 1.8; font-size: 0.98rem; color: var(--text-mid); }
+    .about-bio-card p + p { margin-top: 14px; }
+    .about-bio-card strong { color: var(--text); }
+
+    .terminal-card { padding: 0; font-family: var(--mono); }
+    .terminal-head {
+      display: flex; align-items: center; gap: 7px;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border);
+      background: var(--surface-2);
     }
+    .terminal-dot { width: 9px; height: 9px; border-radius: 50%; }
+    .terminal-dot.r { background: #ff5f57; }
+    .terminal-dot.y { background: #febc2e; }
+    .terminal-dot.g { background: #28c840; }
+    .terminal-title { margin-left: 8px; font-size: 0.72rem; color: var(--text-soft); }
+    .terminal-body { padding: 20px 22px; display: flex; flex-direction: column; gap: 11px; }
+    .term-row { display: flex; gap: 14px; font-size: 0.8rem; }
+    .term-key { color: var(--text-soft); min-width: 84px; flex-shrink: 0; }
+    .term-val { color: var(--text); }
+    .term-val.accent { color: var(--accent); }
+    .term-val.gold { color: var(--gold); }
 
-    .contact-card p {
-      font-size: 1rem;
-      color: var(--text-soft);
+    .interest-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 22px; }
+    .tag {
+      font-family: var(--mono);
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      color: var(--text-mid);
+      font-size: 0.76rem;
       font-weight: 500;
-      max-width: 400px;
-      margin: 0 auto 32px;
-      line-height: 1.65;
+      padding: 6px 12px;
+      border-radius: 6px;
+      transition: border-color 0.2s, color 0.2s;
     }
+    .tag:hover { border-color: var(--accent); color: var(--accent); }
 
-    .contact-links {
+    /* PROJECTS */
+    .projects-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
+    .project-card {
+      cursor: pointer;
       display: flex;
-      gap: 14px;
-      justify-content: center;
-      flex-wrap: wrap;
+      flex-direction: column;
+    }
+    .project-card.featured { grid-column: 1 / -1; display: grid; grid-template-columns: 1.1fr 1fr; }
+    .project-card.featured .project-body { display: flex; flex-direction: column; justify-content: center; }
+
+    .project-img-wrap { position: relative; overflow: hidden; }
+    .project-card.featured .project-img-wrap { min-height: 250px; }
+    .project-card:not(.featured) .project-img-wrap { height: 180px; }
+    .project-img { width: 100%; height: 100%; object-fit: cover; display: block; filter: saturate(0.85) brightness(0.82); transition: transform 0.5s ease, filter 0.4s ease; }
+    .project-card:hover .project-img { transform: scale(1.05); filter: saturate(1) brightness(0.95); }
+    .project-img-wrap::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(180deg, transparent 40%, rgba(10,12,16,0.5) 100%);
     }
 
-    /* ── FOOTER ─────────────────────────────────────────────────── */
+    .project-number {
+      position: absolute; top: 12px; left: 12px; z-index: 2;
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: var(--bg);
+      background: var(--accent);
+      padding: 3px 9px;
+      border-radius: 5px;
+    }
+    .award-badge {
+      position: absolute; top: 12px; right: 12px; z-index: 2;
+      font-family: var(--mono);
+      background: var(--gold);
+      color: #3a2900;
+      font-size: 0.68rem;
+      font-weight: 700;
+      padding: 3px 9px;
+      border-radius: 5px;
+    }
+    .expand-hint {
+      position: absolute; bottom: 10px; right: 10px; z-index: 2;
+      font-family: var(--mono); font-size: 0.68rem;
+      color: var(--text); background: rgba(10,12,16,0.6);
+      border: 1px solid var(--border-hi);
+      padding: 3px 9px; border-radius: 5px;
+      opacity: 0; transform: translateY(4px);
+      transition: opacity 0.25s, transform 0.25s;
+    }
+    .project-card:hover .expand-hint { opacity: 1; transform: translateY(0); }
+
+    .project-body { padding: 22px 24px 24px; display: flex; flex-direction: column; gap: 9px; flex: 1; }
+    .project-label { font-family: var(--mono); font-size: 0.7rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent-b); }
+    .project-title { font-family: var(--display); font-size: 1.14rem; font-weight: 700; color: var(--text); line-height: 1.25; }
+    .project-desc { font-size: 0.87rem; line-height: 1.65; color: var(--text-mid); flex: 1; }
+    .project-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 2px; }
+    .mini-tag { font-family: var(--mono); font-size: 0.68rem; color: var(--text-soft); border: 1px solid var(--border); padding: 2px 8px; border-radius: 5px; }
+
+    /* MODAL */
+    .modal-overlay {
+      position: fixed; inset: 0; z-index: 500;
+      background: rgba(6,8,11,0.78);
+      backdrop-filter: blur(6px);
+      display: flex; align-items: center; justify-content: center;
+      padding: 24px;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.25s;
+    }
+    .modal-overlay.open { opacity: 1; pointer-events: auto; }
+    .modal-box {
+      background: var(--surface);
+      border: 1px solid var(--border-hi);
+      border-radius: var(--radius-lg);
+      max-width: 620px; width: 100%;
+      max-height: 86vh;
+      overflow-y: auto;
+      transform: translateY(18px) scale(0.98);
+      transition: transform 0.3s cubic-bezier(.22,.68,0,1.1);
+    }
+    .modal-overlay.open .modal-box { transform: translateY(0) scale(1); }
+    .modal-img-wrap { position: relative; height: 240px; overflow: hidden; }
+    .modal-img-wrap img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .modal-close {
+      position: absolute; top: 14px; right: 14px; z-index: 2;
+      width: 32px; height: 32px; border-radius: 50%;
+      background: rgba(10,12,16,0.7); border: 1px solid var(--border-hi);
+      color: var(--text); font-family: var(--mono); font-size: 1rem;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+    }
+    .modal-body { padding: 26px 28px 30px; }
+    .modal-body .project-label { margin-bottom: 6px; display: block; }
+    .modal-body .project-title { font-size: 1.4rem; margin-bottom: 12px; }
+    .modal-body .project-desc { font-size: 0.92rem; margin-bottom: 18px; }
+    .modal-body .project-tags { margin-bottom: 20px; }
+
+    /* SKILLS */
+    .skills-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+    .skill-card { padding: 24px 24px 26px; }
+    .skill-card h4 {
+      font-family: var(--mono);
+      font-size: 0.76rem;
+      font-weight: 600;
+      color: var(--accent);
+      margin-bottom: 16px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; gap: 8px;
+    }
+    .skill-card h4::before { content: '$'; color: var(--text-soft); }
+    .skill-tags { display: flex; flex-wrap: wrap; gap: 7px; }
+
+    .github-card { grid-column: 1 / -1; padding: 24px 26px 26px; }
+    .github-card h4 { font-family: var(--mono); font-size: 0.76rem; color: var(--accent); margin-bottom: 16px; display:flex; align-items:center; gap:8px; }
+    .github-card h4::before { content: '$'; color: var(--text-soft); }
+    .github-chart-wrap { overflow-x: auto; padding-bottom: 4px; }
+    .github-chart-wrap img { filter: invert(0.92) hue-rotate(60deg) saturate(1.4); min-width: 640px; }
+    .github-fallback { display: none; font-family: var(--mono); font-size: 0.82rem; color: var(--text-soft); }
+
+    /* CONTACT */
+    .contact-card { padding: 52px 48px; text-align: center; }
+    .contact-cmd {
+      font-family: var(--mono);
+      font-size: clamp(0.82rem, 2vw, 1rem);
+      color: var(--text-mid);
+      margin-bottom: 28px;
+      display: inline-block;
+    }
+    .contact-cmd .prompt { color: var(--accent); }
+    .contact-cmd .str { color: var(--accent-b); }
+    .contact-links { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+
+    /* FOOTER */
     footer {
       text-align: center;
-      padding: 40px 20px 20px;
-      font-size: 0.82rem;
+      padding: 44px 20px 26px;
+      font-family: var(--mono);
+      font-size: 0.78rem;
       color: var(--text-soft);
-      font-weight: 500;
       position: relative;
-      z-index: 1;
+      z-index: 2;
     }
+    footer span { color: var(--accent); }
 
-    /* ── FADE-IN ANIMATION ──────────────────────────────────────── */
-    .fade-up {
-      opacity: 0;
-      transform: translateY(28px);
-      transition: opacity 0.6s ease, transform 0.6s ease;
-    }
-    .fade-up.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
+    /* FADE-IN */
+    .fade-up { opacity: 0; transform: translateY(24px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .fade-up.visible { opacity: 1; transform: translateY(0); }
 
-    /* ── RESPONSIVE ─────────────────────────────────────────────── */
+    /* RESPONSIVE */
     @media (max-width: 760px) {
-      nav { padding: 0 22px; }
-      .nav-links { gap: 18px; }
-
-      #hero {
-        grid-template-columns: 1fr;
-        text-align: center;
-        padding-top: 100px;
-      }
-      .hero-image-wrap { order: -1; }
-      .hero-badge, .hero-cta-row { justify-content: center; }
-      .hero-tagline { margin: 0 auto; }
-      .chip-1, .chip-2, .chip-3, .chip-4 { display: none; } /* Hide all chips on mobile */
-
+      nav { padding: 0 20px; }
+      .nav-links { gap: 16px; }
+      #hero { grid-template-columns: 1fr; text-align: center; padding-top: 110px; min-height: unset; }
+      .hero-image-wrap { order: -1; margin-bottom: 10px; }
+      .hero-cta-row { justify-content: center; }
+      .hero-desc { margin: 0 auto; }
+      .chip-1, .chip-2, .chip-3, .chip-4 { display: none; }
       .about-grid { grid-template-columns: 1fr; }
-      .about-bio-card { grid-column: 1; }
-
       .projects-grid { grid-template-columns: 1fr; }
-      .project-card.featured {
-        grid-template-columns: 1fr;
-        grid-column: 1;
-      }
-
-      .skills-groups { grid-template-columns: 1fr 1fr; }
-      .contact-card { padding: 40px 28px; }
+      .project-card.featured { grid-template-columns: 1fr; grid-column: 1; }
+      .skills-grid { grid-template-columns: 1fr 1fr; }
+      .github-card { grid-column: 1 / -1; }
+      .contact-card { padding: 36px 22px; }
+      .cursor-dot, .cursor-ring { display: none; }
+    }
+    @media (max-width: 480px) {
+      .skills-grid { grid-template-columns: 1fr; }
+      nav { padding: 0 14px; }
+      .nav-links { gap: 10px; }
+      .nav-links a { font-size: 0.68rem; }
+      .nav-links a::before, .nav-links a::after { display: none; }
+      .nav-logo { font-size: 0.82rem; }
     }
   </style>
 </head>
 <body>
 
+  <div class="bg-grid"></div>
+  <div class="bg-blob blob-a"></div>
+  <div class="bg-blob blob-b"></div>
+  <div class="bg-blob blob-c"></div>
+  <div class="noise"></div>
+  <div class="cursor-dot" id="cursorDot"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+
   <nav>
-    <span class="nav-logo">Eden Chen</span>
+    <span class="nav-logo"><span class="status-dot"></span>eden<span>.</span>chen</span>
     <ul class="nav-links">
-      <li><a href="#about">About</a></li>
-      <li><a href="#projects">Projects</a></li>
-      <li><a href="#skills">Skills</a></li>
-      <li><a href="#contact">Contact</a></li>
+      <li><a href="#about">about</a></li>
+      <li><a href="#projects">projects</a></li>
+      <li><a href="#skills">skills</a></li>
+      <li><a href="#contact">contact</a></li>
     </ul>
   </nav>
 
@@ -644,74 +607,71 @@
 
     <section id="hero">
       <div class="hero-text fade-up">
-        <div class="hero-badge">NYU Stern · BTE Program</div>
-        <h1 class="hero-name">Eden<br/>Chen</h1>
-        <p class="hero-tagline">
-          <strong>NYU Stern</strong> Business, Technology & Entrepreneurship student
-          turning a passion for <strong>Product Management</strong> into real
-          experience — from a PM internship at Kalshi to a 1st-place hackathon build.
+        <span class="eyebrow">whoami<span class="blink-cursor"></span></span>
+        <h1 class="hero-name">Eden Chen</h1>
+        <div class="hero-type-row"><span class="type-text" id="typewriter"></span><span class="blink-cursor"></span></div>
+        <p class="hero-desc">
+          A business student at NYU Stern who loves solving problems and turning ideas into <strong>shipped, tested things</strong> — from a hackathon-winning hardware gadget to event programming for NYU's Product Management Club.
         </p>
         <div class="hero-cta-row">
-          <a href="#projects" class="btn btn-primary">View Projects</a>
-          <a href="docs/Eden_Chen_Resume.pdf" class="btn btn-outline" target="_blank" rel="noopener">Resume</a>
-          <a href="#contact" class="btn btn-primary">Let's Connect</a>
+          <a href="#projects" class="btn btn-primary">[ View Projects ]</a>
+          <a href="docs/Eden_Chen_Resume.pdf" class="btn" target="_blank" rel="noopener">[ Resume ]</a>
+          <a href="#contact" class="btn">[ Say Hi ]</a>
         </div>
       </div>
 
       <div class="hero-image-wrap fade-up" style="animation-delay:0.15s">
-        <img
-          src="images/headshot.jpg"
-          alt="Eden Chen smiling in a professional headshot photo"
-          class="hero-img"
-        />
-        <span class="chip-float chip-1">🎮 Valorant @ NYU</span>
-        <span class="chip-float chip-2">🏔️ Smoky Mountains</span>
-        <span class="chip-float chip-3">📦 PM Intern @ Kalshi</span>
-        <span class="chip-float chip-4">🏀 Loves Basketball</span>
+        <div class="hero-img-frame">
+          <img src="images/headshot.jpg" alt="Eden Chen smiling in a professional headshot photo" />
+        </div>
+        <span class="chip-float chip-1">&gt; pmc event coord.</span>
+        <span class="chip-float chip-2">&gt; valorant: top 0.11%</span>
+        <span class="chip-float chip-3">&gt; nc / fuzhou</span>
+        <span class="chip-float chip-4">&gt; nyu stern</span>
       </div>
     </section>
 
+    <div class="ticker-wrap">
+      <div class="ticker-track" id="tickerTrack"></div>
+    </div>
+
     <section id="about">
       <div class="section-header fade-up">
+        <span class="section-num">01</span>
         <h2 class="section-title">About <span>Me</span></h2>
         <div class="section-line"></div>
       </div>
 
       <div class="about-grid">
-        <div class="about-bio-card fade-up">
-          <p>
-            Born and raised in the Smoky Mountains of North Carolina, I grew up surrounded by nature — hiking trails, mountain air, and a deeply curious mind that loved strategy games and competition. Basketball courts and gaming sessions shaped how I think: quickly, collaboratively, and with an eye for what moves the needle.
-          </p>
-          <p>
-            Now at NYU Stern's Business, Technology & Entrepreneurship program, I've turned that competitive spirit into hands-on product work — interning as a Product Manager at Kalshi through NYU's Product Management Club, where I've pitched app frameworks, run competitive analysis, and synthesized user interviews into strategic recommendations.
-          </p>
-          <p>
-            When I'm not building products, you'll find me co-leading orientation seminars for incoming Stern students, fragging out as an Immortal-ranked duelist on NYU's Valorant esports team, or out with a camera chasing a nature photo.
-          </p>
-        </div>
-
-        <div class="interest-card fade-up">
-          <h3>Interests</h3>
-          <div class="interest-tags">
-            <span class="tag">🏀 Basketball</span>
-            <span class="tag">📸 Nature Photography</span>
-            <span class="tag">🎬 Content Creation</span>
-            <span class="tag">🎵 Folk Pop</span>
-            <span class="tag">🥾 Mountain Hiking</span>
-            <span class="tag">📖 Percy Jackson</span>
-            <span class="tag">🥒 Pickleball</span>
-            <span class="tag">🎴 Pokémon TCGP</span>
+        <div class="about-bio-card spot-card fade-up">
+          <p>Born and raised in the Smoky Mountains of North Carolina, I grew up surrounded by nature — hiking trails, mountain air, and a deeply curious mind that loved strategy games and competition. Basketball courts and gaming sessions shaped how I think: quickly, collaboratively, and with an eye for what moves the needle.</p>
+          <p>Now at NYU Stern's Business, Technology &amp; Entrepreneurship program, I've turned that competitive spirit into hands-on experience — serving as an <strong>Event Coordinator for NYU's Product Management Club</strong>, where I've helped run app-framework pitch sessions, competitive-analysis workshops, and user-research programming for students exploring product careers, myself included.</p>
+          <p>When I'm not organizing events, you'll find me co-leading orientation seminars for incoming Stern students, competing as a <strong>Starter on NYU's Valorant esports team</strong>, or out with a camera chasing a nature photo.</p>
+          <div class="interest-row">
+            <span class="tag">#basketball</span>
+            <span class="tag">#nature_photography</span>
+            <span class="tag">#content_creation</span>
+            <span class="tag">#folk_pop</span>
+            <span class="tag">#mountain_hiking</span>
+            <span class="tag">#percy_jackson</span>
+            <span class="tag">#pickleball</span>
+            <span class="tag">#pokemon_tcgp</span>
           </div>
         </div>
 
-        <div class="interest-card fade-up">
-          <h3>Currently</h3>
-          <div class="interest-tags">
-            <span class="tag">📦 PM Intern @ Kalshi</span>
-            <span class="tag">🎓 BTE @ NYU Stern</span>
-            <span class="tag">🧭 NYU Orientation Leader</span>
-            <span class="tag">🕹️ Valorant (Immortal)</span>
-            <span class="tag">🌏 Bilingual: Mandarin</span>
+        <div class="terminal-card spot-card fade-up" style="animation-delay:0.1s">
+          <div class="terminal-head">
+            <span class="terminal-dot r"></span><span class="terminal-dot y"></span><span class="terminal-dot g"></span>
+            <span class="terminal-title">status.log</span>
+          </div>
+          <div class="terminal-body">
+            <div class="term-row"><span class="term-key">status</span><span class="term-val accent">event coordinator, nyu pmc</span></div>
+            <div class="term-row"><span class="term-key">focus</span><span class="term-val">exploring product management</span></div>
+            <div class="term-row"><span class="term-key">based_in</span><span class="term-val">new york, ny</span></div>
+            <div class="term-row"><span class="term-key">origin</span><span class="term-val">north carolina / fuzhou</span></div>
+            <div class="term-row"><span class="term-key">languages</span><span class="term-val">english, mandarin</span></div>
+            <div class="term-row"><span class="term-key">esports</span><span class="term-val gold">nyu esports starter (valorant) — top 0.11%</span></div>
+            <div class="term-row"><span class="term-key">school</span><span class="term-val">nyu stern — bte</span></div>
           </div>
         </div>
       </div>
@@ -719,175 +679,78 @@
 
     <section id="projects">
       <div class="section-header fade-up">
+        <span class="section-num">02</span>
         <h2 class="section-title">Featured <span>Projects</span></h2>
         <div class="section-line"></div>
       </div>
 
-      <div class="projects-grid">
-
-        <div class="project-card featured fade-up">
-          <div class="project-img-wrap">
-            <img
-              src="images/project-1.jpg"
-              alt="Toki — a Tamagotchi-style physical gadget that encourages children to go outside and get sunlight to keep their virtual pet alive"
-              class="project-img"
-            />
-            <span class="project-number">01</span>
-            <span class="award-badge">🏆 1st Place</span>
-          </div>
-          <div class="project-body">
-            <span class="project-label">BTE Age of AI Hackathon</span>
-            <h3 class="project-title">Toki — Bridging Digital Play & Physical Well-being</h3>
-            <p class="project-desc">
-              We built Toki, a Tamagotchi-style gadget that requires real sunlight and outdoor activity to keep the virtual pet alive — turning "screen time" into "sun time." Designed to address the developmental challenges modern children face from insufficient unstructured play and sun exposure.
-            </p>
-            <a href="https://docs.google.com/presentation/d/1IYM0sbIusUrmbLBCUNrQlPCG2qbsiy72qzXS2N5mrMY/edit?usp=sharing"
-               target="_blank" rel="noopener" class="project-link">View Presentation</a>
-          </div>
-        </div>
-
-        <div class="project-card fade-up">
-          <div class="project-img-wrap">
-            <img
-              src="images/project-2.jpg"
-              alt="Kalshi product management pitch deck showing market analysis, UX wireframes, and strategic recommendations for the prediction market platform"
-              class="project-img"
-            />
-            <span class="project-number">02</span>
-          </div>
-          <div class="project-body">
-            <span class="project-label">PM Club Feature Pitch</span>
-            <h3 class="project-title">Kalshi — Product Strategy Deep-Dive</h3>
-            <p class="project-desc">
-              Developed and pitched 10+ app frameworks to Kalshi product managers through market analysis, prototyping, and UX testing. Delivered a 10-page business analysis with competitive benchmarking and market sizing, then synthesized 7 user interviews into five strategic recommendations to improve product-market fit and adoption.
-            </p>
-            <a href="https://pitch.com/v/kalshi--pmc-eden-c-bjsurn"
-               target="_blank" rel="noopener" class="project-link">View Pitch</a>
-          </div>
-        </div>
-
-        <div class="project-card fade-up">
-          <div class="project-img-wrap">
-            <img
-              src="images/project-3.jpg"
-              alt="Stern Business Analytics Club project showing data visualizations and financial correlation models built from the Fortune 2021-2022 dataset"
-              class="project-img"
-            />
-            <span class="project-number">03</span>
-          </div>
-          <div class="project-body">
-            <span class="project-label">Stern BAC · FLP Final Project</span>
-            <h3 class="project-title">Fortune 500 Financial Correlation Analysis</h3>
-            <p class="project-desc">
-              Analyzed the Fortune 2021–2022 dataset and built multiple statistical models to uncover correlations between key financial variables. Presented findings as part of the Freshman Liaison Program.
-            </p>
-            <a href="https://www.figma.com/deck/iYDlGSmil9oYpnjpIxAzp3/BAC-FLP-Final-Project---Eden-Chen"
-               target="_blank" rel="noopener" class="project-link">View Project</a>
-          </div>
-        </div>
-
-        <div class="project-card fade-up">
-          <div class="project-img-wrap">
-            <img
-              src="images/project-4.jpg"
-              alt="Short-form video content for Axal and Dub fintech startups on TikTok and Instagram, showing finance concepts explained in engaging social media format"
-              class="project-img"
-            />
-            <span class="project-number">04</span>
-          </div>
-          <div class="project-body">
-            <span class="project-label">Content Marketing · Fintech</span>
-            <h3 class="project-title">UGC Engine for Fintech Brands</h3>
-            <p class="project-desc">
-              Currently producing short-form content for Miyagi Labs, building on prior UGC work for fintechs Axal & Dub — 3+ videos per week generating 30K+ views across TikTok and Instagram. Independently ideated and executed every video concept, sustaining a high-volume, on-brand content cadence.
-            </p>
-            <div class="interest-tags" style="margin-top: 4px;">
-              <span class="tag">📱 TikTok</span>
-              <span class="tag">📸 Instagram</span>
-              <span class="tag">30K+ Views</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="project-card fade-up">
-          <div class="project-img-wrap">
-            <img
-              src="images/project-5.jpg"
-              alt="BTE Design Sprint for ArtsWrk"
-              class="project-img"
-            />
-            <span class="project-number">05</span>
-          </div>
-          <div class="project-body">
-            <span class="project-label">Consulting · Product Strategy</span>
-            <h3 class="project-title">BTE Design Sprint for ArtsWrk</h3>
-            <p class="project-desc">
-              Collaborating directly with the founders of ArtsWrk, I conducted qualitative go-to-market research by synthesizing data from over 20 studios and employers to deliver human-centered insights for a strategic business pitch. Leveraging design thinking frameworks, I successfully translated these insights into actionable solutions that simplified the organization's hiring tunnel and streamlined its payment system.
-            </p>
-            <a href="https://docs.google.com/presentation/d/1_QkArVhi6VWy3iVyaaMnycxLrIBG88vLsi5AwhikUyg/edit?usp=sharing" target="_blank" rel="noopener" class="project-link">View Presentation</a>
-          </div>
-        </div>
-
-      </div>
+      <div class="projects-grid" id="projectsGrid"></div>
     </section>
 
     <section id="skills">
       <div class="section-header fade-up">
+        <span class="section-num">03</span>
         <h2 class="section-title">Skills &amp; <span>Tools</span></h2>
         <div class="section-line"></div>
       </div>
 
-      <div class="skills-card fade-up">
-        <div class="skills-groups">
-          <div class="skill-group">
-            <h4>Product & Strategy</h4>
-            <div class="skill-list">
-              <span class="skill-item">Product Management</span>
-              <span class="skill-item">UX Research</span>
-              <span class="skill-item">Project Planning</span>
-              <span class="skill-item">Market Analysis</span>
-              <span class="skill-item">Problem Solving</span>
-            </div>
+      <div class="skills-grid">
+        <div class="skill-card spot-card fade-up">
+          <h4>product_and_strategy</h4>
+          <div class="skill-tags">
+            <span class="tag">Product Management</span>
+            <span class="tag">UX Research</span>
+            <span class="tag">Project Planning</span>
+            <span class="tag">Market Analysis</span>
+            <span class="tag">Problem Solving</span>
           </div>
-          <div class="skill-group">
-            <h4>Technical</h4>
-            <div class="skill-list">
-              <span class="skill-item">Python</span>
-              <span class="skill-item">SQL</span>
-              <span class="skill-item">Figma</span>
-              <span class="skill-item">Miro</span>
-              <span class="skill-item">Pitchbook</span>
-              <span class="skill-item">Google Suites</span>
-              <span class="skill-item">Microsoft Suites</span>
-              <span class="skill-item">CapCut</span>
-            </div>
+        </div>
+        <div class="skill-card spot-card fade-up" style="animation-delay:0.08s">
+          <h4>technical</h4>
+          <div class="skill-tags">
+            <span class="tag">Python</span>
+            <span class="tag">SQL</span>
+            <span class="tag">Figma</span>
+            <span class="tag">Miro</span>
+            <span class="tag">Pitchbook</span>
+            <span class="tag">Google Suite</span>
+            <span class="tag">Microsoft Suite</span>
+            <span class="tag">CapCut</span>
           </div>
-          <div class="skill-group">
-            <h4>Soft Skills & Languages</h4>
-            <div class="skill-list">
-              <span class="skill-item">Bilingual: Mandarin</span>
-              <span class="skill-item">Content Marketing</span>
-              <span class="skill-item">Time Management</span>
-              <span class="skill-item">Communication</span>
-              <span class="skill-item">Strategic Thinking</span>
-            </div>
+        </div>
+        <div class="skill-card spot-card fade-up" style="animation-delay:0.16s">
+          <h4>soft_skills</h4>
+          <div class="skill-tags">
+            <span class="tag">Bilingual: Mandarin</span>
+            <span class="tag">Content Marketing</span>
+            <span class="tag">Time Management</span>
+            <span class="tag">Communication</span>
+            <span class="tag">Strategic Thinking</span>
           </div>
+        </div>
+
+        <div class="github-card spot-card fade-up" style="animation-delay:0.22s">
+          <h4>git_activity --user edenkchen</h4>
+          <div class="github-chart-wrap">
+            <img src="https://ghchart.rshah.org/46f2a6/edenkchen" alt="Eden Chen's GitHub contribution graph" id="githubChart" style="display:none;" />
+          </div>
+          <p class="github-fallback" id="githubFallback" style="display:block;">loading git activity — or view live at <a href="https://github.com/edenkchen" target="_blank" rel="noopener" style="color:var(--accent);">github.com/edenkchen</a></p>
         </div>
       </div>
     </section>
 
     <section id="contact">
       <div class="section-header fade-up">
+        <span class="section-num">04</span>
         <h2 class="section-title">Get in <span>Touch</span></h2>
         <div class="section-line"></div>
       </div>
 
-      <div class="contact-card fade-up">
-        <h3>Let's build something together.</h3>
-        <p>Whether you're looking to collaborate, chat product, or just say hello — my inbox is always open.</p>
+      <div class="contact-card spot-card fade-up">
+        <div class="contact-cmd"><span class="prompt">$</span> echo <span class="str">"let's build something together"</span> | mail eden<span class="blink-cursor"></span></div>
         <div class="contact-links">
-          <a href="mailto:cheneden1234@gmail.com" class="btn btn-primary">✉ Email Me</a>
-          <a href="https://www.linkedin.com/in/cheneden/" target="_blank" rel="noopener" class="btn btn-outline">LinkedIn →</a>
+          <a href="mailto:cheneden1234@gmail.com" class="btn btn-primary">[ Email Me ]</a>
+          <a href="https://www.linkedin.com/in/cheneden/" target="_blank" rel="noopener" class="btn">[ LinkedIn ]</a>
         </div>
       </div>
     </section>
@@ -895,36 +758,256 @@
   </main>
 
   <footer>
-    <p>© 2026 Eden Chen &nbsp;·&nbsp; NYU Stern BTE &nbsp;·&nbsp; Built with care ☁️</p>
+    <p>© 2026 eden.chen &nbsp;·&nbsp; nyu stern bte &nbsp;·&nbsp; built with <span>care</span> + a little too much css</p>
   </footer>
 
+  <!-- Project modal -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal-box" id="modalBox">
+      <div class="modal-img-wrap">
+        <button class="modal-close" id="modalClose" aria-label="Close">✕</button>
+        <img id="modalImg" src="" alt="" />
+      </div>
+      <div class="modal-body">
+        <span class="project-label" id="modalLabel"></span>
+        <h3 class="project-title" id="modalTitle"></h3>
+        <p class="project-desc" id="modalDesc"></p>
+        <div class="project-tags" id="modalTags"></div>
+        <a href="#" target="_blank" rel="noopener" class="btn btn-primary" id="modalLink">[ View More ]</a>
+      </div>
+    </div>
+  </div>
+
   <script>
-    // Intersection Observer for fade-up animations
+    // PROJECT DATA
+    const projects = [
+      {
+        featured: true,
+        number: '01',
+        label: 'BTE Age of AI Hackathon',
+        title: 'Toki — Bridging Digital Play & Physical Well-being',
+        desc: 'We built Toki, a Tamagotchi-style gadget that requires real sunlight and outdoor activity to keep the virtual pet alive — turning "screen time" into "sun time." Designed to address the developmental challenges modern children face from insufficient unstructured play and sun exposure.',
+        modalDesc: 'We built Toki, a Tamagotchi-style gadget that requires real sunlight and outdoor activity to keep the virtual pet alive — turning "screen time" into "sun time." Designed to address the developmental challenges modern children face from insufficient unstructured play and sun exposure. Executed and validated a B2B/D2C hardware model targeting the $71B educational toy market, specifically nature-based preschools, and prototyped a Tamagotchi-style Arduino IoT gadget that utilizes sunlight detection and location telemetry to incentivize play and activity.',
+        image: 'images/project-1.jpg',
+        alt: 'Toki — a Tamagotchi-style physical gadget that encourages children to go outside and get sunlight to keep their virtual pet alive',
+        badge: '🏆 1st Place',
+        tags: ['Hardware', 'Arduino', 'B2C Strategy'],
+        link: 'https://docs.google.com/presentation/d/1IYM0sbIusUrmbLBCUNrQlPCG2qbsiy72qzXS2N5mrMY/edit?usp=sharing',
+        linkText: 'View Presentation'
+      },
+      {
+        number: '02',
+        label: 'PM Club Feature Pitch',
+        title: 'Kalshi — Product Strategy Deep-Dive',
+        desc: 'Developed and pitched 10+ app frameworks to Kalshi product managers through market analysis, prototyping, and UX testing.',
+        modalDesc: 'Developed and pitched 10+ app frameworks to Kalshi product managers through market analysis, prototyping, and UX testing. Delivered a 10-page business analysis with competitive benchmarking and market sizing, then synthesized 7 user interviews into five strategic recommendations to improve product-market fit and adoption.',
+        image: 'images/project-2.jpg',
+        alt: 'Kalshi product management pitch deck showing market analysis, UX wireframes, and strategic recommendations for the prediction market platform',
+        tags: ['Market Analysis', 'UX Testing', 'PM'],
+        link: 'https://pitch.com/v/kalshi--pmc-eden-c-bjsurn',
+        linkText: 'View Pitch'
+      },
+      {
+        number: '03',
+        label: 'Stern BAC · FLP Final Project',
+        title: 'Fortune 500 Financial Correlation Analysis',
+        desc: 'Analyzed the Fortune 2021–2022 dataset and built multiple statistical models to uncover correlations between key financial variables.',
+        modalDesc: 'Analyzed the Fortune 2021–2022 dataset and built multiple statistical models to uncover correlations between key financial variables. Presented findings as part of the Freshman Liaison Program.',
+        image: 'images/project-3.jpg',
+        alt: 'Stern Business Analytics Club project showing data visualizations and financial correlation models built from the Fortune 2021-2022 dataset',
+        tags: ['Statistics', 'Data Viz'],
+        link: 'https://www.figma.com/deck/iYDlGSmil9oYpnjpIxAzp3/BAC-FLP-Final-Project---Eden-Chen',
+        linkText: 'View Project'
+      },
+      {
+        number: '04',
+        label: 'Content Marketing · Fintech',
+        title: 'UGC Engine for Fintech Brands',
+        desc: 'Currently producing short-form content for Miyagi Labs, building on prior UGC work for fintechs Axal & Dub — 3+ videos/week generating 30K+ views.',
+        modalDesc: 'Currently producing short-form content for Miyagi Labs, building on prior UGC work for fintechs Axal & Dub — 3+ videos per week generating 30K+ views across TikTok and Instagram. Independently ideated and executed every video concept, sustaining a high-volume, on-brand content cadence.',
+        image: 'images/project-4.jpg',
+        alt: 'Short-form video content for Axal and Dub fintech startups on TikTok and Instagram, showing finance concepts explained in engaging social media format',
+        tags: ['TikTok', 'Instagram', '30K+ Views'],
+        link: null
+      },
+      {
+        number: '05',
+        label: 'Consulting · Product Strategy',
+        title: 'BTE Design Sprint for ArtsWrk',
+        desc: 'Collaborating directly with the founders of ArtsWrk, I conducted qualitative go-to-market research synthesizing data from 20+ studios and employers.',
+        modalDesc: 'Collaborating directly with the founders of ArtsWrk, I conducted qualitative go-to-market research by synthesizing data from over 20 studios and employers to deliver human-centered insights for a strategic business pitch. Leveraging design thinking frameworks, I successfully translated these insights into actionable solutions that simplified the organization\'s hiring tunnel and streamlined its payment system.',
+        image: 'images/project-5.jpg',
+        alt: 'BTE Design Sprint for ArtsWrk',
+        tags: ['Design Thinking', 'GTM Research'],
+        link: 'https://docs.google.com/presentation/d/1_QkArVhi6VWy3iVyaaMnycxLrIBG88vLsi5AwhikUyg/edit?usp=sharing',
+        linkText: 'View Presentation'
+      }
+    ];
+
+    const grid = document.getElementById('projectsGrid');
+    projects.forEach((p, i) => {
+      const card = document.createElement('div');
+      card.className = 'project-card spot-card fade-up' + (p.featured ? ' featured' : '');
+      card.style.animationDelay = (i * 0.06) + 's';
+      card.innerHTML = `
+        <div class="project-img-wrap">
+          <img class="project-img" src="${p.image}" alt="${p.alt}" />
+          <span class="project-number">${p.number}</span>
+          ${p.badge ? `<span class="award-badge">${p.badge}</span>` : ''}
+          <span class="expand-hint">expand +</span>
+        </div>
+        <div class="project-body">
+          <span class="project-label">${p.label}</span>
+          <h3 class="project-title">${p.title}</h3>
+          <p class="project-desc">${p.desc}</p>
+          <div class="project-tags">${(p.tags||[]).map(t => `<span class="mini-tag">${t}</span>`).join('')}</div>
+        </div>
+      `;
+      card.addEventListener('click', () => openModal(p));
+      grid.appendChild(card);
+    });
+
+    // MODAL
+    const overlay = document.getElementById('modalOverlay');
+    const modalImg = document.getElementById('modalImg');
+    const modalLabel = document.getElementById('modalLabel');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalDesc = document.getElementById('modalDesc');
+    const modalTags = document.getElementById('modalTags');
+    const modalLink = document.getElementById('modalLink');
+
+    function openModal(p) {
+      modalImg.src = p.image;
+      modalImg.alt = p.alt;
+      modalLabel.textContent = p.label;
+      modalTitle.textContent = p.title;
+      modalDesc.textContent = p.modalDesc || p.desc;
+      modalTags.innerHTML = (p.tags||[]).map(t => `<span class="mini-tag">${t}</span>`).join('');
+      if (p.link) {
+        modalLink.href = p.link;
+        modalLink.textContent = '[ ' + (p.linkText || 'View More') + ' ]';
+        modalLink.style.display = 'inline-flex';
+      } else {
+        modalLink.style.display = 'none';
+      }
+      overlay.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeModal() {
+      overlay.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+    document.getElementById('modalClose').addEventListener('click', closeModal);
+    overlay.addEventListener('click', (e) => { if (e.target === overlay) closeModal(); });
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
+
+    // TYPEWRITER
+    const phrases = [
+      'A business student who loves solving problems.',
+      '1st-place hackathon builder.',
+      'NYU Esports Starter (Valorant) — Top 0.11%.',
+      'Event Coordinator, NYU PMC.'
+    ];
+    const typeEl = document.getElementById('typewriter');
+    let pI = 0, cI = 0, deleting = false;
+    function tick() {
+      const current = phrases[pI];
+      if (!deleting) {
+        cI++;
+        typeEl.textContent = current.slice(0, cI);
+        if (cI === current.length) { deleting = true; setTimeout(tick, 1500); return; }
+        setTimeout(tick, 55 + Math.random()*40);
+      } else {
+        cI--;
+        typeEl.textContent = current.slice(0, cI);
+        if (cI === 0) { deleting = false; pI = (pI + 1) % phrases.length; setTimeout(tick, 300); return; }
+        setTimeout(tick, 28);
+      }
+    }
+    tick();
+
+    // TICKER CONTENT
+    const tickerWords = ['PRODUCT MANAGEMENT','PYTHON','SQL','FIGMA','MARKET ANALYSIS','MIRO','PITCHBOOK','UX RESEARCH','CAPCUT','MANDARIN','STRATEGIC THINKING'];
+    const track = document.getElementById('tickerTrack');
+    const buildTicker = () => tickerWords.map(w => `<span class="ticker-item">${w}</span>`).join('');
+    track.innerHTML = buildTicker() + buildTicker();
+
+    // SPOTLIGHT CARD MOUSE TRACKING
+    document.querySelectorAll('.spot-card').forEach(card => {
+      card.addEventListener('mousemove', (e) => {
+        const rect = card.getBoundingClientRect();
+        card.style.setProperty('--mx', (e.clientX - rect.left) + 'px');
+        card.style.setProperty('--my', (e.clientY - rect.top) + 'px');
+      });
+    });
+
+    // MAGNETIC BUTTONS
+    document.querySelectorAll('.btn').forEach(btn => {
+      btn.addEventListener('mousemove', (e) => {
+        const rect = btn.getBoundingClientRect();
+        const x = (e.clientX - rect.left - rect.width/2) * 0.25;
+        const y = (e.clientY - rect.top - rect.height/2) * 0.35;
+        btn.style.transform = `translate(${x}px, ${y}px)`;
+      });
+      btn.addEventListener('mouseleave', () => { btn.style.transform = ''; });
+    });
+
+    // CUSTOM CURSOR
+    const isFinePointer = window.matchMedia('(pointer: fine)').matches;
+    if (isFinePointer) {
+      document.body.classList.add('has-cursor');
+      const dot = document.getElementById('cursorDot');
+      const ring = document.getElementById('cursorRing');
+      let mx = window.innerWidth/2, my = window.innerHeight/2;
+      let rx = mx, ry = my;
+      window.addEventListener('mousemove', (e) => {
+        mx = e.clientX; my = e.clientY;
+        dot.style.transform = `translate(${mx}px, ${my}px) translate(-50%,-50%)`;
+      });
+      function loop() {
+        rx += (mx - rx) * 0.18;
+        ry += (my - ry) * 0.18;
+        ring.style.transform = `translate(${rx}px, ${ry}px) translate(-50%,-50%)`;
+        requestAnimationFrame(loop);
+      }
+      loop();
+      document.querySelectorAll('a, button, .project-card, .tag').forEach(el => {
+        el.addEventListener('mouseenter', () => ring.classList.add('active'));
+        el.addEventListener('mouseleave', () => ring.classList.remove('active'));
+      });
+    }
+
+    // GITHUB CHART (progressive enhancement)
+    const ghChart = document.getElementById('githubChart');
+    const ghFallback = document.getElementById('githubFallback');
+    ghChart.addEventListener('load', () => {
+      ghChart.style.display = 'block';
+      ghFallback.style.display = 'none';
+    });
+    ghChart.addEventListener('error', () => {
+      ghChart.style.display = 'none';
+      ghFallback.style.display = 'block';
+    });
+
+    // FADE-UP OBSERVER
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry, i) => {
         if (entry.isIntersecting) {
-          setTimeout(() => entry.target.classList.add('visible'), i * 80);
+          setTimeout(() => entry.target.classList.add('visible'), i * 70);
           observer.unobserve(entry.target);
         }
       });
     }, { threshold: 0.12 });
-
     document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
 
-    // Smooth active state for nav (optional polish)
+    // NAV ACTIVE STATE
     const sections = document.querySelectorAll('section[id]');
     const navLinks = document.querySelectorAll('.nav-links a');
-    const onScroll = () => {
+    window.addEventListener('scroll', () => {
       let current = '';
-      sections.forEach(s => {
-        if (window.scrollY >= s.offsetTop - 90) current = s.id;
-      });
-      navLinks.forEach(a => {
-        a.style.color = a.getAttribute('href') === '#' + current
-          ? 'var(--blue-a)' : '';
-      });
-    };
-    window.addEventListener('scroll', onScroll, { passive: true });
+      sections.forEach(s => { if (window.scrollY >= s.offsetTop - 90) current = s.id; });
+      navLinks.forEach(a => { a.style.color = a.getAttribute('href') === '#' + current ? 'var(--accent)' : ''; });
+    }, { passive: true });
   </script>
 </body>
 </html>
