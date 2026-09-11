@@ -520,13 +520,6 @@
     .skill-card h4::before { content: '$'; color: var(--text-soft); }
     .skill-tags { display: flex; flex-wrap: wrap; gap: 7px; }
 
-    .github-card { grid-column: 1 / -1; padding: 24px 26px 26px; }
-    .github-card h4 { font-family: var(--mono); font-size: 0.76rem; color: var(--accent); margin-bottom: 16px; display:flex; align-items:center; gap:8px; }
-    .github-card h4::before { content: '$'; color: var(--text-soft); }
-    .github-chart-wrap { overflow-x: auto; padding-bottom: 4px; }
-    .github-chart-wrap img { filter: invert(0.92) hue-rotate(60deg) saturate(1.4); min-width: 640px; }
-    .github-fallback { display: none; font-family: var(--mono); font-size: 0.82rem; color: var(--text-soft); }
-
     /* CONTACT */
     .contact-card { padding: 52px 48px; text-align: center; }
     .contact-cmd {
@@ -569,7 +562,6 @@
       .projects-grid { grid-template-columns: 1fr; }
       .project-card.featured { grid-template-columns: 1fr; grid-column: 1; }
       .skills-grid { grid-template-columns: 1fr 1fr; }
-      .github-card { grid-column: 1 / -1; }
       .contact-card { padding: 36px 22px; }
       .cursor-dot, .cursor-ring { display: none; }
     }
@@ -727,14 +719,6 @@
             <span class="tag">Communication</span>
             <span class="tag">Strategic Thinking</span>
           </div>
-        </div>
-
-        <div class="github-card spot-card fade-up" style="animation-delay:0.22s">
-          <h4>git_activity --user edenkchen</h4>
-          <div class="github-chart-wrap">
-            <img src="https://ghchart.rshah.org/46f2a6/edenkchen" alt="Eden Chen's GitHub contribution graph" id="githubChart" style="display:none;" />
-          </div>
-          <p class="github-fallback" id="githubFallback" style="display:block;">loading git activity — or view live at <a href="https://github.com/edenkchen" target="_blank" rel="noopener" style="color:var(--accent);">github.com/edenkchen</a></p>
         </div>
       </div>
     </section>
@@ -976,18 +960,6 @@
         el.addEventListener('mouseleave', () => ring.classList.remove('active'));
       });
     }
-
-    // GITHUB CHART (progressive enhancement)
-    const ghChart = document.getElementById('githubChart');
-    const ghFallback = document.getElementById('githubFallback');
-    ghChart.addEventListener('load', () => {
-      ghChart.style.display = 'block';
-      ghFallback.style.display = 'none';
-    });
-    ghChart.addEventListener('error', () => {
-      ghChart.style.display = 'none';
-      ghFallback.style.display = 'block';
-    });
 
     // FADE-UP OBSERVER
     const observer = new IntersectionObserver((entries) => {
