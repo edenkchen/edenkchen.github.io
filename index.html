@@ -117,6 +117,65 @@
       padding: 0 20px;
     }
 
+    /* VINYL PLAYER */
+    .loader-vinyl-slot { width: 250px; height: 76px; margin-top: -8px; }
+    .vinyl {
+      position: fixed; top: 0; left: 0; z-index: 150;
+      display: flex; align-items: center; gap: 12px;
+      padding: 8px 12px 8px 8px;
+      background: var(--surface);
+      border: 2px solid var(--navy);
+      border-radius: 99px;
+      box-shadow: var(--shadow);
+      opacity: 0;
+    }
+    .vinyl.placed { opacity: 1; }
+    .vinyl.loading { z-index: 2100; }
+    .vinyl.docked { transition: top 0.9s cubic-bezier(.6,0,.2,1), left 0.9s cubic-bezier(.6,0,.2,1); }
+    .vinyl-disc {
+      position: relative; flex-shrink: 0;
+      width: 56px; height: 56px; border-radius: 50%;
+      border: 2px solid var(--navy);
+      background:
+        radial-gradient(circle, var(--navy) 0 3px, var(--lemon) 3px 13px, var(--navy) 13px 14px, transparent 14px),
+        repeating-radial-gradient(circle, #0b1f4b 0 2px, #1c3a7a 2px 3px);
+      cursor: pointer;
+      animation: vinyl-spin 2.4s linear infinite;
+      animation-play-state: paused;
+    }
+    .vinyl-disc::after {
+      content: ''; position: absolute; inset: 4px; border-radius: 50%;
+      background: conic-gradient(from 20deg, transparent 0 12%, rgba(255,255,255,0.28) 16%, transparent 22% 62%, rgba(255,255,255,0.2) 66%, transparent 72%);
+      pointer-events: none;
+    }
+    .vinyl.playing .vinyl-disc { animation-play-state: running; }
+    @keyframes vinyl-spin { to { transform: rotate(360deg); } }
+    .vinyl-info { display: flex; flex-direction: column; gap: 3px; min-width: 0; text-align: left; }
+    .vinyl-status { font-family: var(--pixel); font-size: 0.46rem; color: var(--accent-b); letter-spacing: 0.04em; white-space: nowrap; }
+    .vinyl-title { font-family: var(--display); font-weight: 700; font-size: 1.05rem; line-height: 1; color: var(--navy); white-space: nowrap; }
+    .vinyl-title mark { background: linear-gradient(transparent 55%, var(--lemon) 55%); color: inherit; }
+    .vinyl-artist { font-family: var(--mono); font-size: 0.68rem; font-weight: 700; color: var(--text-mid); white-space: nowrap; }
+    .vinyl-more {
+      width: 26px; height: 26px; flex-shrink: 0; border-radius: 50%;
+      border: 2px solid var(--navy); background: var(--lemon); color: var(--navy);
+      font-size: 0.7rem; font-weight: 700; line-height: 1; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .vinyl-panel {
+      position: absolute; top: calc(100% + 10px); right: 0;
+      width: 204px; height: 117px;
+      border: 2px solid var(--navy); border-radius: 8px; overflow: hidden;
+      background: var(--navy); box-shadow: var(--shadow);
+      opacity: 0; pointer-events: none; transition: opacity 0.2s;
+    }
+    .vinyl.open .vinyl-panel { opacity: 1; pointer-events: auto; }
+    .vinyl-panel iframe { display: block; width: 200px; height: 113px; border: 0; }
+    @media (max-width: 760px) {
+      .vinyl.docked { padding: 5px; gap: 6px; }
+      .vinyl.docked .vinyl-info { display: none; }
+      .vinyl.docked .vinyl-disc { width: 44px; height: 44px; }
+    }
+
     /* AMBIENT BACKGROUND */
     .bg-grid {
       position: fixed;
@@ -633,7 +692,7 @@
     @media (max-width: 760px) {
       nav { padding: 0 20px; }
       .nav-links { gap: 16px; }
-      #hero { grid-template-columns: 1fr; text-align: center; padding-top: 110px; min-height: unset; }
+      #hero { grid-template-columns: 1fr; text-align: center; padding-top: 156px; min-height: unset; }
       .hero-image-wrap { order: -1; margin-bottom: 10px; }
       .hero-cta-row { justify-content: center; }
       .hero-desc { margin: 0 auto; }
@@ -680,7 +739,20 @@
     </div>
     <div class="loader-bar"><div class="loader-fill" id="loaderFill"></div></div>
     <div class="loader-meta"><span>LOADING PORTFOLIO</span><span id="loaderPct">0%</span></div>
-    <p class="loader-foot">© 2026 Eden Chen. NYU Stern BTE. Click anywhere to skip.</p>
+    <div class="loader-vinyl-slot" id="vinylSlot"></div>
+    <p class="loader-foot">© 2026 Eden Chen. NYU Stern BTE. Click anywhere to start the music.</p>
+  </div>
+
+  <!-- Vinyl music player -->
+  <div class="vinyl loading" id="vinyl">
+    <button class="vinyl-disc" id="vinylBtn" aria-label="Play or pause music" aria-pressed="false"></button>
+    <div class="vinyl-info">
+      <span class="vinyl-status" id="vinylStatus">♪ TAP TO PLAY</span>
+      <span class="vinyl-title"><mark>Small Town</mark></span>
+      <span class="vinyl-artist">Dominic Fike</span>
+    </div>
+    <button class="vinyl-more" id="vinylMore" aria-label="Show video player" aria-expanded="false">▾</button>
+    <div class="vinyl-panel"><div id="ytPlayer"></div></div>
   </div>
 
   <div class="bg-grid"></div>
@@ -869,6 +941,86 @@
   </div>
 
   <script>
+    // VINYL MUSIC PLAYER — streams the official YouTube upload, quietly, on repeat
+    (function () {
+      const VIDEO_ID = '3CHgKR1OzlU', VOLUME = 15;
+      const vinyl = document.getElementById('vinyl');
+      const slot = document.getElementById('vinylSlot');
+      const btn = document.getElementById('vinylBtn');
+      const more = document.getElementById('vinylMore');
+      const status = document.getElementById('vinylStatus');
+      let player = null, ready = false, playing = false, userPaused = false, docked = false;
+
+      function place() {
+        let top, left;
+        if (docked) {
+          top = 76; left = window.innerWidth - vinyl.offsetWidth - 20;
+        } else {
+          const r = slot.getBoundingClientRect();
+          top = r.top + (r.height - vinyl.offsetHeight) / 2;
+          left = r.left + (r.width - vinyl.offsetWidth) / 2;
+        }
+        vinyl.style.top = Math.round(top) + 'px';
+        vinyl.style.left = Math.round(left) + 'px';
+        vinyl.classList.add('placed');
+      }
+      place();
+      window.addEventListener('resize', place);
+      if (document.fonts && document.fonts.ready) document.fonts.ready.then(place);
+
+      window.dockVinyl = function () {
+        if (docked) return;
+        vinyl.classList.add('docked');
+        void vinyl.offsetWidth;
+        docked = true;
+        place();
+        setTimeout(() => { vinyl.classList.remove('loading'); place(); }, 950);
+      };
+
+      function setPlaying(on) {
+        playing = on;
+        vinyl.classList.toggle('playing', on);
+        btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+        status.textContent = on ? '♪ NOW PLAYING' : (userPaused ? '❚❚ PAUSED' : '♪ TAP TO PLAY');
+      }
+      function play() { if (ready) { player.setVolume(VOLUME); player.playVideo(); } }
+
+      window.onYouTubeIframeAPIReady = function () {
+        player = new YT.Player('ytPlayer', {
+          videoId: VIDEO_ID, width: 200, height: 113,
+          playerVars: { autoplay: 1, loop: 1, playlist: VIDEO_ID, playsinline: 1, rel: 0 },
+          events: {
+            onReady: () => { ready = true; if (!userPaused) play(); },
+            onStateChange: (e) => {
+              if (e.data === YT.PlayerState.ENDED) { player.seekTo(0); play(); }
+              setPlaying(e.data === YT.PlayerState.PLAYING);
+            }
+          }
+        });
+      };
+      const tag = document.createElement('script');
+      tag.src = 'https://www.youtube.com/iframe_api';
+      document.head.appendChild(tag);
+
+      btn.addEventListener('click', () => {
+        if (!ready) return;
+        if (playing) { userPaused = true; player.pauseVideo(); }
+        else { userPaused = false; play(); }
+      });
+      more.addEventListener('click', () => {
+        const open = vinyl.classList.toggle('open');
+        more.setAttribute('aria-expanded', open ? 'true' : 'false');
+      });
+      // Browsers block sound until the visitor interacts, so start on the first click or key press.
+      function firstGesture(e) {
+        if (e.target.closest && e.target.closest('#vinyl')) return;
+        if (!playing && !userPaused) play();
+        if (ready) { document.removeEventListener('pointerdown', firstGesture); document.removeEventListener('keydown', firstGesture); }
+      }
+      document.addEventListener('pointerdown', firstGesture);
+      document.addEventListener('keydown', firstGesture);
+    })();
+
     // LOADING SCREEN
     (function () {
       const loader = document.getElementById('loader');
@@ -879,7 +1031,7 @@
       function finish() {
         if (finished) return; finished = true;
         fill.style.width = '100%'; pct.textContent = '100%';
-        setTimeout(() => { loader.classList.add('done'); document.body.classList.remove('loading'); }, reduce ? 0 : 350);
+        setTimeout(() => { loader.classList.add('done'); document.body.classList.remove('loading'); if (window.dockVinyl) window.dockVinyl(); }, reduce ? 0 : 350);
       }
       if (reduce) { finish(); return; }
       const timer = setInterval(() => {
