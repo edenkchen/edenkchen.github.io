@@ -161,6 +161,8 @@
       font-size: 0.7rem; font-weight: 700; line-height: 1; cursor: pointer;
       display: flex; align-items: center; justify-content: center;
     }
+    .vinyl-next { font-size: 0.42rem; letter-spacing: -1px; background: var(--surface); margin-right: -6px; }
+    .vinyl-next:hover { background: var(--lemon); }
     .vinyl-panel {
       position: absolute; top: calc(100% + 10px); right: 0;
       width: 204px; height: 117px;
@@ -192,14 +194,13 @@
       position: fixed;
       z-index: 0;
       border-radius: 50%;
-      filter: blur(90px);
       pointer-events: none;
       opacity: 0.7;
       will-change: transform;
     }
-    .blob-a { width: 480px; height: 480px; top: -160px; left: -120px; background: #ffffff; animation: drift-a 22s ease-in-out infinite; }
-    .blob-b { width: 420px; height: 420px; top: 220px; right: -160px; background: #9fd0ee; animation: drift-b 26s ease-in-out infinite; }
-    .blob-c { width: 360px; height: 360px; bottom: -140px; left: 30%; background: rgba(255,242,92,0.35); animation: drift-c 30s ease-in-out infinite; }
+    .blob-a { width: 760px; height: 760px; top: -300px; left: -260px; background: radial-gradient(circle, #ffffff 0%, rgba(255,255,255,0.75) 25%, rgba(255,255,255,0) 68%); animation: drift-a 22s ease-in-out infinite; }
+    .blob-b { width: 700px; height: 700px; top: 80px; right: -300px; background: radial-gradient(circle, #9fd0ee 0%, rgba(159,208,238,0.75) 25%, rgba(159,208,238,0) 68%); animation: drift-b 26s ease-in-out infinite; }
+    .blob-c { width: 640px; height: 640px; bottom: -280px; left: calc(30% - 140px); background: radial-gradient(circle, rgba(255,242,92,0.35) 0%, rgba(255,242,92,0.26) 25%, rgba(255,242,92,0) 68%); animation: drift-c 30s ease-in-out infinite; }
 
     @keyframes drift-a { 0%,100% { transform: translate(0,0); } 50% { transform: translate(60px, 40px); } }
     @keyframes drift-b { 0%,100% { transform: translate(0,0); } 50% { transform: translate(-50px, 60px); } }
@@ -343,6 +344,7 @@
       min-height: 1.6em;
       display: flex;
       align-items: center;
+      contain: layout style;
     }
     .hero-type-row .type-text { color: var(--navy); background: linear-gradient(transparent 58%, var(--lemon) 58%); }
 
@@ -446,6 +448,7 @@
       display: flex;
       width: max-content;
       animation: ticker-scroll 26s linear infinite;
+      will-change: transform;
       gap: 0;
     }
     .ticker-wrap:hover .ticker-track { animation-play-state: paused; }
@@ -606,10 +609,10 @@
       backdrop-filter: blur(4px);
       display: flex; align-items: center; justify-content: center;
       padding: 24px;
-      opacity: 0; pointer-events: none;
-      transition: opacity 0.25s;
+      opacity: 0; pointer-events: none; visibility: hidden;
+      transition: opacity 0.25s, visibility 0s linear 0.25s;
     }
-    .modal-overlay.open { opacity: 1; pointer-events: auto; }
+    .modal-overlay.open { opacity: 1; pointer-events: auto; visibility: visible; transition: opacity 0.25s; }
     .modal-box {
       background: var(--surface);
       border: 3px solid var(--navy);
@@ -752,9 +755,10 @@
     <button class="vinyl-disc" id="vinylBtn" aria-label="Play or pause music" aria-pressed="false"></button>
     <div class="vinyl-info">
       <span class="vinyl-status" id="vinylStatus">♪ TAP TO PLAY</span>
-      <span class="vinyl-title"><mark>Small Town</mark></span>
-      <span class="vinyl-artist">Dominic Fike</span>
+      <span class="vinyl-title"><mark id="vinylTitle">Small Town</mark></span>
+      <span class="vinyl-artist" id="vinylArtist">Dominic Fike</span>
     </div>
+    <button class="vinyl-more vinyl-next" id="vinylNext" aria-label="Next song">&#9654;&#9654;</button>
     <button class="vinyl-more" id="vinylMore" aria-label="Show video player" aria-expanded="false">▾</button>
     <div class="vinyl-panel"><div id="ytPlayer"></div></div>
   </div>
@@ -806,7 +810,7 @@
 
       <div class="hero-image-wrap fade-up" style="animation-delay:0.15s">
         <div class="hero-img-frame">
-          <img src="images/headshot.jpg" alt="Eden Chen smiling in a professional headshot photo" />
+          <img src="images/headshot.jpg" width="810" height="806" decoding="async" alt="Eden Chen smiling in a professional headshot photo" />
         </div>
         <span class="chip-float chip-1">&gt; pmc event coord.</span>
         <span class="chip-float chip-2">&gt; valorant: top 0.01%</span>
@@ -941,7 +945,19 @@
   <script>
     // VINYL MUSIC PLAYER: streams the official YouTube upload, quietly, on repeat
     (function () {
-      const VIDEO_ID = '3CHgKR1OzlU', VOLUME = 15;
+      const VOLUME = 15;
+      const SONGS = [
+        { id: '3CHgKR1OzlU', title: 'Small Town',       artist: 'Dominic Fike' },
+        { id: 'sHD_z90ZKV0', title: '稻香',              artist: 'Jay Chou' },
+        { id: 'MXmQq7AkXYE', title: 'Forever',          artist: 'Noah Kahan' },
+        { id: '6JHu3b-pbh8', title: 'Thinkin Bout You', artist: 'Frank Ocean' },
+        { id: 'S2Cti12XBw4', title: 'Sunday Morning',   artist: 'Maroon 5' },
+        { id: 'Pi9J4epTWGM', title: 'Pluto Projector',  artist: 'Rex Orange County' }
+      ];
+      let songIdx = 0, errorStreak = 0;
+      const titleEl = document.getElementById('vinylTitle');
+      const artistEl = document.getElementById('vinylArtist');
+      const nextBtn = document.getElementById('vinylNext');
       const vinyl = document.getElementById('vinyl');
       const slot = document.getElementById('vinylSlot');
       const btn = document.getElementById('vinylBtn');
@@ -982,23 +998,43 @@
         status.textContent = on ? '♪ NOW PLAYING' : (userPaused ? '❚❚ PAUSED' : '♪ TAP TO PLAY');
       }
       function play() { if (ready) { player.setVolume(VOLUME); player.playVideo(); } }
+      function showSong() {
+        titleEl.textContent = SONGS[songIdx].title;
+        artistEl.textContent = SONGS[songIdx].artist;
+        place();
+      }
+      function nextSong() {
+        songIdx = (songIdx + 1) % SONGS.length;
+        showSong();
+        if (ready) { userPaused = false; player.setVolume(VOLUME); player.loadVideoById(SONGS[songIdx].id); }
+      }
 
       window.onYouTubeIframeAPIReady = function () {
         player = new YT.Player('ytPlayer', {
-          videoId: VIDEO_ID, width: 200, height: 113,
-          playerVars: { autoplay: 1, loop: 1, playlist: VIDEO_ID, playsinline: 1, rel: 0 },
+          videoId: SONGS[songIdx].id, width: 200, height: 113,
+          playerVars: { autoplay: 1, playsinline: 1, rel: 0 },
           events: {
             onReady: () => { ready = true; if (!userPaused) play(); },
             onStateChange: (e) => {
-              if (e.data === YT.PlayerState.ENDED) { player.seekTo(0); play(); }
+              if (e.data === YT.PlayerState.ENDED) { nextSong(); return; }
+              if (e.data === YT.PlayerState.PLAYING) errorStreak = 0;
               setPlaying(e.data === YT.PlayerState.PLAYING);
-            }
+            },
+            // If a song can't be played (removed or blocked in the visitor's region), skip to the next one.
+            onError: () => { if (++errorStreak < SONGS.length) nextSong(); }
           }
         });
       };
-      const tag = document.createElement('script');
-      tag.src = 'https://www.youtube.com/iframe_api';
-      document.head.appendChild(tag);
+      // Load the YouTube player only after the page itself has finished loading, so it doesn't compete with first paint.
+      function loadYT() {
+        if (loadYT.done) return; loadYT.done = true;
+        const tag = document.createElement('script');
+        tag.src = 'https://www.youtube.com/iframe_api';
+        document.head.appendChild(tag);
+      }
+      if (document.readyState === 'complete') loadYT(); else window.addEventListener('load', loadYT);
+
+      nextBtn.addEventListener('click', nextSong);
 
       btn.addEventListener('click', () => {
         if (!ready) return;
@@ -1127,7 +1163,7 @@
       card.style.animationDelay = (i * 0.06) + 's';
       card.innerHTML = `
         <div class="project-img-wrap">
-          <img class="project-img" src="${p.image}" alt="${p.alt}" />
+          <img class="project-img" src="${p.image}" alt="${p.alt}" loading="lazy" decoding="async" />
           <span class="project-number">${p.number}</span>
           ${p.badge ? `<span class="award-badge">${p.badge}</span>` : ''}
           <span class="expand-hint">expand +</span>
@@ -1209,11 +1245,18 @@
 
     // SPOTLIGHT CARD MOUSE TRACKING
     document.querySelectorAll('.spot-card').forEach(card => {
+      let queued = false, cx = 0, cy = 0;
       card.addEventListener('mousemove', (e) => {
-        const rect = card.getBoundingClientRect();
-        card.style.setProperty('--mx', (e.clientX - rect.left) + 'px');
-        card.style.setProperty('--my', (e.clientY - rect.top) + 'px');
-      });
+        cx = e.clientX; cy = e.clientY;
+        if (queued) return;
+        queued = true;
+        requestAnimationFrame(() => {
+          queued = false;
+          const rect = card.getBoundingClientRect();
+          card.style.setProperty('--mx', (cx - rect.left) + 'px');
+          card.style.setProperty('--my', (cy - rect.top) + 'px');
+        });
+      }, { passive: true });
     });
 
     // MAGNETIC BUTTONS
@@ -1235,15 +1278,19 @@
       const ring = document.getElementById('cursorRing');
       let mx = window.innerWidth/2, my = window.innerHeight/2;
       let rx = mx, ry = my;
+      let looping = false;
       window.addEventListener('mousemove', (e) => {
         mx = e.clientX; my = e.clientY;
-        dot.style.transform = `translate(${mx}px, ${my}px) translate(-50%,-50%)`;
-      });
+        if (!looping) { looping = true; requestAnimationFrame(loop); }
+      }, { passive: true });
+      // Runs only while the cursor is moving, then goes idle.
       function loop() {
+        dot.style.transform = `translate(${mx}px, ${my}px) translate(-50%,-50%)`;
         rx += (mx - rx) * 0.18;
         ry += (my - ry) * 0.18;
+        if (Math.abs(mx - rx) < 0.1 && Math.abs(my - ry) < 0.1) { rx = mx; ry = my; looping = false; }
         ring.style.transform = `translate(${rx}px, ${ry}px) translate(-50%,-50%)`;
-        requestAnimationFrame(loop);
+        if (looping) requestAnimationFrame(loop);
       }
       loop();
       document.querySelectorAll('a, button, .project-card, .tag').forEach(el => {
@@ -1266,10 +1313,18 @@
     // NAV ACTIVE STATE
     const sections = document.querySelectorAll('section[id]');
     const navLinks = document.querySelectorAll('.nav-links a');
+    let navQueued = false, navCurrent = null;
     window.addEventListener('scroll', () => {
-      let current = '';
-      sections.forEach(s => { if (window.scrollY >= s.offsetTop - 90) current = s.id; });
-      navLinks.forEach(a => { a.style.color = a.getAttribute('href') === '#' + current ? 'var(--lemon)' : ''; });
+      if (navQueued) return;
+      navQueued = true;
+      requestAnimationFrame(() => {
+        navQueued = false;
+        let current = '';
+        sections.forEach(s => { if (window.scrollY >= s.offsetTop - 90) current = s.id; });
+        if (current === navCurrent) return;
+        navCurrent = current;
+        navLinks.forEach(a => { a.style.color = a.getAttribute('href') === '#' + current ? 'var(--lemon)' : ''; });
+      });
     }, { passive: true });
   </script>
 </body>
