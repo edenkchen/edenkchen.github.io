@@ -224,11 +224,16 @@
       transform: translate(-50%, -50%);
       will-change: transform;
     }
-    .cursor-dot { width: 6px; height: 6px; background: var(--navy); }
+    .cursor-dot {
+      width: 7px; height: 7px;
+      background: var(--lemon);
+      box-shadow: 0 0 0 2px var(--navy), 0 0 10px 3px rgba(255,242,92,0.9);
+    }
     .cursor-ring {
       width: 30px; height: 30px;
-      border: 2px solid var(--navy);
+      border: 2px solid var(--lemon);
       border-radius: 4px;
+      box-shadow: 0 0 0 1.5px var(--navy), inset 0 0 0 1.5px var(--navy), 0 0 12px 2px rgba(255,242,92,0.75);
       transition: width 0.2s, height 0.2s, background 0.2s;
     }
     .cursor-ring.active { width: 46px; height: 46px; background: rgba(255,242,92,0.35); }
