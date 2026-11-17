@@ -2,13 +2,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Eden Chen — Portfolio</title>
+  <title>Eden Chen | Portfolio</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=DM+Sans:wght@400;500;700&family=Pixelify+Sans:wght@500;700&family=Press+Start+2P&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
 
   <style>
-    /* TOKENS — glacier blue / navy / lemon */
+    /* TOKENS: glacier blue / navy / lemon */
     :root {
       --bg:        #cfe6f4;
       --bg-soft:   #dff0f9;
@@ -215,7 +215,7 @@
       background-image: repeating-linear-gradient(0deg, rgba(11,31,75,0.035) 0 1px, transparent 1px 3px);
     }
 
-    /* CUSTOM CURSOR — crosshair */
+    /* CUSTOM CURSOR: crosshair */
     .cursor-dot, .cursor-ring {
       position: fixed;
       top: 0; left: 0;
@@ -241,7 +241,7 @@
       z-index: 100;
       display: flex;
       align-items: center;
-      justify-content: space-between;
+      justify-content: flex-end;
       padding: 0 48px;
       height: 62px;
       background: var(--navy);
@@ -476,7 +476,7 @@
     .section-num::before { content: 'LV.'; }
     .section-line { flex: 1; height: 0; border-top: 3px dotted var(--navy); opacity: 0.45; }
 
-    /* CARD BASE — game window */
+    /* CARD BASE: game window */
     .spot-card {
       position: relative;
       background: var(--surface);
@@ -500,12 +500,12 @@
     .spot-card > * { position: relative; z-index: 2; }
 
     /* ABOUT */
-    .about-grid { display: grid; grid-template-columns: 1.3fr 1fr; gap: 26px; }
-    .about-bio-card { padding: 32px 34px; line-height: 1.8; font-size: 0.98rem; color: var(--text-mid); }
+    .about-grid { display: flex; justify-content: center; }
+    .about-bio-card { padding: 26px 28px; line-height: 1.7; font-size: 0.94rem; color: var(--text-mid); text-align: left; }
     .about-bio-card p + p { margin-top: 14px; }
     .about-bio-card strong { color: var(--navy); background: linear-gradient(transparent 60%, var(--lemon) 60%); }
 
-    .terminal-card { padding: 0; font-family: var(--mono); align-self: start; }
+    .terminal-card { padding: 0; font-family: var(--mono); width: 100%; max-width: 560px; }
     .terminal-head {
       display: flex; align-items: center; gap: 7px;
       padding: 11px 14px;
@@ -699,7 +699,6 @@
       .eyebrow { align-self: center; }
       .hero-type-row { justify-content: center; }
       .chip-1, .chip-2, .chip-3, .chip-4 { display: none; }
-      .about-grid { grid-template-columns: 1fr; }
       .projects-grid { grid-template-columns: 1fr; }
       .project-card.featured { grid-template-columns: 1fr; grid-column: 1; }
       .project-card.featured .project-img-wrap { border-right: 0; border-bottom: 2px solid var(--navy); }
@@ -764,7 +763,6 @@
   <div class="cursor-ring" id="cursorRing"></div>
 
   <nav>
-    <span class="nav-logo"><span class="status-dot"></span>eden<span>.</span>chen</span>
     <ul class="nav-links">
       <li><a href="#about">about</a></li>
       <li><a href="#projects">projects</a></li>
@@ -777,12 +775,23 @@
 
     <section id="hero">
       <div class="hero-text fade-up">
-        <span class="eyebrow">whoami<span class="blink-cursor"></span></span>
         <h1 class="hero-name">Eden Chen</h1>
         <div class="hero-type-row"><span class="type-text" id="typewriter"></span><span class="blink-cursor"></span></div>
-        <p class="hero-desc">
-          A business student at NYU Stern who loves solving problems and turning ideas into <strong>shipped, tested things</strong> — from a hackathon-winning hardware gadget to event programming for NYU's Product Management Club.
-        </p>
+        <div class="about-bio-card spot-card">
+          <p>Born and raised in the Smoky Mountains of North Carolina, I grew up surrounded by nature: hiking trails, mountain air, and a deeply curious mind that loved strategy games and competition. Basketball courts and gaming sessions shaped how I think: quickly, collaboratively, and with an eye for what moves the needle.</p>
+          <p>Now at NYU Stern's Business, Technology &amp; Entrepreneurship program, I've turned that competitive spirit into hands-on experience, serving as an <strong>Event Coordinator for NYU's Product Management Club</strong>, where I've helped run app-framework pitch sessions, competitive-analysis workshops, and user-research programming for students exploring product careers, myself included.</p>
+          <p>When I'm not organizing events, you'll find me co-leading orientation seminars for incoming Stern students, competing as a <strong>Duelist Starter on NYU Violet Rangers Valorant eSports</strong>, or out with a camera chasing a nature photo!</p>
+          <div class="interest-row">
+            <span class="tag">#basketball</span>
+            <span class="tag">#nature_photography</span>
+            <span class="tag">#content_creation</span>
+            <span class="tag">#folk_pop</span>
+            <span class="tag">#mountain_hiking</span>
+            <span class="tag">#percy_jackson</span>
+            <span class="tag">#pickleball</span>
+            <span class="tag">#pokemon_tcgp</span>
+          </div>
+        </div>
         <div class="hero-cta-row">
           <a href="#projects" class="btn btn-primary">[ View Projects ]</a>
           <a href="docs/Eden_Chen_Resume.pdf" class="btn" target="_blank" rel="noopener">[ Resume ]</a>
@@ -813,23 +822,7 @@
       </div>
 
       <div class="about-grid">
-        <div class="about-bio-card spot-card fade-up">
-          <p>Born and raised in the Smoky Mountains of North Carolina, I grew up surrounded by nature — hiking trails, mountain air, and a deeply curious mind that loved strategy games and competition. Basketball courts and gaming sessions shaped how I think: quickly, collaboratively, and with an eye for what moves the needle.</p>
-          <p>Now at NYU Stern's Business, Technology &amp; Entrepreneurship program, I've turned that competitive spirit into hands-on experience — serving as an <strong>Event Coordinator for NYU's Product Management Club</strong>, where I've helped run app-framework pitch sessions, competitive-analysis workshops, and user-research programming for students exploring product careers, myself included.</p>
-          <p>When I'm not organizing events, you'll find me co-leading orientation seminars for incoming Stern students, competing as a <strong>Duelist Starter on NYU Violet Rangers Valorant eSports</strong>, or out with a camera chasing a nature photo!</p>
-          <div class="interest-row">
-            <span class="tag">#basketball</span>
-            <span class="tag">#nature_photography</span>
-            <span class="tag">#content_creation</span>
-            <span class="tag">#folk_pop</span>
-            <span class="tag">#mountain_hiking</span>
-            <span class="tag">#percy_jackson</span>
-            <span class="tag">#pickleball</span>
-            <span class="tag">#pokemon_tcgp</span>
-          </div>
-        </div>
-
-        <div class="terminal-card spot-card fade-up" style="animation-delay:0.1s">
+        <div class="terminal-card spot-card fade-up" >
           <div class="terminal-head">
             <span class="terminal-dot r"></span><span class="terminal-dot y"></span><span class="terminal-dot g"></span>
             <span class="terminal-title">status.log</span>
@@ -840,8 +833,8 @@
             <div class="term-row"><span class="term-key">based_in</span><span class="term-val">new york, ny</span></div>
             <div class="term-row"><span class="term-key">origin</span><span class="term-val">north carolina / fuzhou</span></div>
             <div class="term-row"><span class="term-key">languages</span><span class="term-val">english, mandarin</span></div>
-            <div class="term-row"><span class="term-key">esports</span><span class="term-val gold">nyu esports starter (valorant) — top 0.01%</span></div>
-            <div class="term-row"><span class="term-key">school</span><span class="term-val">nyu stern — bte</span></div>
+            <div class="term-row"><span class="term-key">esports</span><span class="term-val gold">nyu esports starter (valorant), top 0.01%</span></div>
+            <div class="term-row"><span class="term-key">school</span><span class="term-val">nyu stern bte</span></div>
           </div>
         </div>
       </div>
@@ -941,7 +934,7 @@
   </div>
 
   <script>
-    // VINYL MUSIC PLAYER — streams the official YouTube upload, quietly, on repeat
+    // VINYL MUSIC PLAYER: streams the official YouTube upload, quietly, on repeat
     (function () {
       const VIDEO_ID = '3CHgKR1OzlU', VOLUME = 15;
       const vinyl = document.getElementById('vinyl');
@@ -1049,11 +1042,11 @@
         featured: true,
         number: '01',
         label: 'BTE Age of AI Hackathon',
-        title: 'Toki — Bridging Digital Play & Physical Well-being',
-        desc: 'We built Toki, a Tamagotchi-style gadget that requires real sunlight and outdoor activity to keep the virtual pet alive — turning "screen time" into "sun time." Designed to address the developmental challenges modern children face from insufficient unstructured play and sun exposure.',
-        modalDesc: 'We built Toki, a Tamagotchi-style gadget that requires real sunlight and outdoor activity to keep the virtual pet alive — turning "screen time" into "sun time." Designed to address the developmental challenges modern children face from insufficient unstructured play and sun exposure. Executed and validated a B2B/D2C hardware model targeting the $71B educational toy market, specifically nature-based preschools, and prototyped a Tamagotchi-style Arduino IoT gadget that utilizes sunlight detection and location telemetry to incentivize play and activity.',
+        title: 'Toki: Bridging Digital Play & Physical Well-being',
+        desc: 'We built Toki, a Tamagotchi-style gadget that requires real sunlight and outdoor activity to keep the virtual pet alive, turning "screen time" into "sun time." Designed to address the developmental challenges modern children face from insufficient unstructured play and sun exposure.',
+        modalDesc: 'We built Toki, a Tamagotchi-style gadget that requires real sunlight and outdoor activity to keep the virtual pet alive, turning "screen time" into "sun time." Designed to address the developmental challenges modern children face from insufficient unstructured play and sun exposure. Executed and validated a B2B/D2C hardware model targeting the $71B educational toy market, specifically nature-based preschools, and prototyped a Tamagotchi-style Arduino IoT gadget that utilizes sunlight detection and location telemetry to incentivize play and activity.',
         image: 'images/project-1.jpg',
-        alt: 'Toki — a Tamagotchi-style physical gadget that encourages children to go outside and get sunlight to keep their virtual pet alive',
+        alt: 'Toki, a Tamagotchi-style physical gadget that encourages children to go outside and get sunlight to keep their virtual pet alive',
         badge: '🏆 1st Place',
         tags: ['Hardware', 'Arduino', 'B2C Strategy'],
         link: 'https://docs.google.com/presentation/d/1IYM0sbIusUrmbLBCUNrQlPCG2qbsiy72qzXS2N5mrMY/edit?usp=sharing',
@@ -1063,7 +1056,7 @@
         featured: true,
         number: '02',
         label: 'Meta | Instagram Friends Hackathon',
-        title: 'Overlap — Keeping Friendships From Drifting Apart',
+        title: 'Overlap: Keeping Friendships From Drifting Apart',
         desc: 'In a 50-minute sprint, we built Overlap: a frictionless, speedy way to stay updated with your friends through statuses and shared interests, allowing for organic engagement.',
         modalDesc: 'In a 50-minute sprint, we went from the problem "friendships drift apart when people move to different places" to Overlap: a frictionless, speedy way to stay updated with your friends through statuses and shared interests, allowing for organic engagement and the ways you already interact with your pre-existing friends. Instead of another social feed, Overlap lives as a home-screen widget where friends join shared activities like hopping on a call or playing a game with one tap, and each profile keeps its app status so there\'s always context to start a conversation, no "are you free?" text required. My biggest takeaway: an executable idea that stays focused on the user\'s problem is what makes a solution actually work.',
         image: 'images/project-6.jpg',
@@ -1076,7 +1069,7 @@
       {
         number: '03',
         label: 'PM Club Feature Pitch',
-        title: 'Kalshi — Product Strategy Deep-Dive',
+        title: 'Kalshi: Product Strategy Deep-Dive',
         desc: 'Developed and pitched 10+ app frameworks to Kalshi product managers through market analysis, prototyping, and UX testing.',
         modalDesc: 'Developed and pitched 10+ app frameworks to Kalshi product managers through market analysis, prototyping, and UX testing. Delivered a 10-page business analysis with competitive benchmarking and market sizing, then synthesized 7 user interviews into five strategic recommendations to improve product-market fit and adoption.',
         image: 'images/project-2.jpg',
@@ -1101,7 +1094,7 @@
         number: '05',
         label: 'Content Marketing · Fintech',
         title: 'UGC Engine for Fintech Brands',
-        desc: 'Currently producing 5+ short-form videos/week for Miyagi Labs, generating 80K+ views — building on prior UGC work for fintechs Axal & Dub.',
+        desc: 'Currently producing 5+ short-form videos/week for Miyagi Labs, generating 80K+ views, building on prior UGC work for fintechs Axal & Dub.',
         modalDesc: 'Currently producing 5+ short-form UGC videos per week for Miyagi Labs, generating 80K+ views across TikTok and Instagram, building on prior UGC work for fintechs Axal & Dub. I ideate, script, and film every video concept, and collaborate with the marketing team to align content with brand campaigns and trends, boosting average watch time.',
         image: 'images/project-4.jpg',
         alt: 'Short-form video content for Axal and Dub fintech startups on TikTok and Instagram, showing finance concepts explained in engaging social media format',
@@ -1183,7 +1176,7 @@
     const phrases = [
       'A business student who loves solving problems.',
       '1st-place hackathon builder.',
-      'NYU Esports Starter (Valorant) — Top 0.01%.',
+      'NYU Esports Starter (Valorant), Top 0.01%.',
       'Event Coordinator, NYU PMC.'
     ];
     const typeEl = document.getElementById('typewriter');
