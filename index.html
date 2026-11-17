@@ -450,7 +450,7 @@
       font-size: 0.64rem;
       color: #cfe6f4;
       letter-spacing: 0.06em;
-      padding: 0 22px;
+      padding: 0 40px;
       display: flex;
       align-items: center;
       gap: 22px;
@@ -1198,9 +1198,8 @@
     tick();
 
     // TICKER CONTENT
-    const tickerWords = ['PRODUCT MANAGEMENT','PYTHON','SQL','FIGMA','MARKET ANALYSIS','MIRO','PITCHBOOK','UX RESEARCH','CAPCUT','MANDARIN','STRATEGIC THINKING'];
     const track = document.getElementById('tickerTrack');
-    const buildTicker = () => tickerWords.map(w => `<span class="ticker-item">${w}</span>`).join('');
+    const buildTicker = () => '<span class="ticker-item" aria-hidden="true"></span>'.repeat(60);
     track.innerHTML = buildTicker() + buildTicker();
 
     // SPOTLIGHT CARD MOUSE TRACKING
