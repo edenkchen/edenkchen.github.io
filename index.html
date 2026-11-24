@@ -838,6 +838,7 @@
           </div>
           <div class="terminal-body">
             <div class="term-row"><span class="term-key">status</span><span class="term-val accent">event coordinator, nyu pmc</span></div>
+            <div class="term-row"><span class="term-key">also</span><span class="term-val">gtm intern @ ami, insight analyst @ stern bac, campus ambassador @ xing fu tang</span></div>
             <div class="term-row"><span class="term-key">focus</span><span class="term-val">exploring product management</span></div>
             <div class="term-row"><span class="term-key">based_in</span><span class="term-val">new york, ny</span></div>
             <div class="term-row"><span class="term-key">origin</span><span class="term-val">north carolina / fuzhou</span></div>
@@ -874,6 +875,8 @@
             <span class="tag">UX Research</span>
             <span class="tag">Project Planning</span>
             <span class="tag">Market Analysis</span>
+            <span class="tag">Data Analysis</span>
+            <span class="tag">GTM Strategy</span>
             <span class="tag">Problem Solving</span>
           </div>
         </div>
@@ -881,10 +884,12 @@
           <h4>technical</h4>
           <div class="skill-tags">
             <span class="tag">Python</span>
+            <span class="tag">pandas</span>
             <span class="tag">SQL</span>
+            <span class="tag">HTML</span>
             <span class="tag">Figma</span>
             <span class="tag">Miro</span>
-            <span class="tag">Pitchbook</span>
+            <span class="tag">Canva</span>
             <span class="tag">Google Suite</span>
             <span class="tag">Microsoft Suite</span>
             <span class="tag">CapCut</span>
@@ -1121,6 +1126,17 @@
       },
       {
         number: '04',
+        label: 'Stern BAC · Insight Team',
+        title: 'Yelp: Predicting Restaurant Star Ratings',
+        desc: 'Cleaned a 150K-business Yelp dataset in Python and built models predicting star ratings for 52K restaurants, cutting error 22% vs. baseline.',
+        modalDesc: 'As an Insight Team Analyst in the Stern Business Analytics Club, I cleaned and engineered a 150K-business Yelp dataset in Python (pandas), merging multi-GB review data into 70+ model-ready features. I built a linear regression predicting star ratings for 52K restaurants that cut error 16% vs. baseline and passed all 5 regression assumptions, then tuned a random forest with cross-validation and GridSearchCV, raising R² from 0.29 to 0.39 and cutting error 22% vs. baseline.',
+        image: 'images/project-7.jpg',
+        alt: 'Yelp star rating prediction model summary showing 150K businesses, 52K restaurants, 70+ features, and R squared improving from 0.29 to 0.39',
+        tags: ['Python', 'pandas', 'Machine Learning'],
+        link: null
+      },
+      {
+        number: '05',
         label: 'Stern BAC · FLP Final Project',
         title: 'Fortune 500 Financial Correlation Analysis',
         desc: 'Analyzed the Fortune 2021–2022 dataset and built multiple statistical models to uncover correlations between key financial variables.',
@@ -1130,17 +1146,6 @@
         tags: ['Statistics', 'Data Viz'],
         link: 'https://www.figma.com/deck/iYDlGSmil9oYpnjpIxAzp3/BAC-FLP-Final-Project---Eden-Chen',
         linkText: 'View Project'
-      },
-      {
-        number: '05',
-        label: 'Content Marketing · Fintech',
-        title: 'UGC Engine for Fintech Brands',
-        desc: 'Currently producing 5+ short-form videos/week for Miyagi Labs, generating 80K+ views, building on prior UGC work for fintechs Axal & Dub.',
-        modalDesc: 'Currently producing 5+ short-form UGC videos per week for Miyagi Labs, generating 80K+ views across TikTok and Instagram, building on prior UGC work for fintechs Axal & Dub. I ideate, script, and film every video concept, and collaborate with the marketing team to align content with brand campaigns and trends, boosting average watch time.',
-        image: 'images/project-4.jpg',
-        alt: 'Short-form video content for Axal and Dub fintech startups on TikTok and Instagram, showing finance concepts explained in engaging social media format',
-        tags: ['TikTok', 'Instagram', '80K+ Views'],
-        link: null
       },
       {
         number: '06',
@@ -1218,7 +1223,8 @@
       'A business student who loves solving problems.',
       '1st-place hackathon builder.',
       'NYU Esports Starter (Valorant), Top 0.01%.',
-      'Event Coordinator, NYU PMC.'
+      'Event Coordinator, NYU PMC.',
+      'GTM Campus Intern, Ami.'
     ];
     const typeEl = document.getElementById('typewriter');
     let pI = 0, cI = 0, deleting = false;
